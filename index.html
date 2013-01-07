@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="nl">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<title>Russisch Royaal - Dies Natalis 2013</title>
+		<script src='vendor/InkNode/lib/require.js'></script>
+
+		<script>
+			require({
+				baseUrl : "scripts",
+				paths : {
+					"jQuery/jQuery" : "http://code.jquery.com/jquery-1.8.3.min",
+					"jQuery/ScrollPath" : "vendor/jQueryScrollPath/script/jquery.scrollpath",
+					"jQuery/Easing" : "vendor/jQueryEasing/jquery.easing.1.3",
+					lib : "vendor/InkNode/lib",
+					cs : "vendor/InkNode/lib/cs",
+					"coffee-script" : "vendor/InkNode/lib/coffee-script"
+				},
+				shim : {
+					"jQuery/ScrollPath": {
+						deps: [ "jQuery/jQuery" ]
+					},
+					"jQuery/Easing": {
+						deps: [ "jQuery/jQuery" ]
+					}
+				}
+			}, [ "cs!main_index" ]);
+		</script>
+
+		<link rel='stylesheet' href='styles/main.css' />
+		<link rel='stylesheet' href='vendor/jQueryScrollPath/style/scrollpath.css' />
+	</head>
+
+	<body>
+		<img id='logo' src='images/logo-silver-300.png' alt='Russisch Royaal' width='300' height='52' />
+		<div id='window'>
+			<div id='background'></div>
+			<div id='black'></div>
+			<div id='foreground'></div>
+
+			<div id='leo' class='slide-title'>
+				<h1><span>12</span> dinsdag</h1>
+				<h2>Laudate et Orate</h2>
+			</div>
+
+			<div id='receptie' class='slide-title'>
+				<h1><span>13</span> woensdag</h1>
+				<h2>Recepski</h2>
+			</div>
+
+			<div id='lezing' class='slide-title'>
+				<h1><span>14</span> donderdag</h1>
+				<h2>Letszing</h2>
+			</div>
+
+			<div id='tsarwars' class='slide-title'>
+				<h1><span>15</span> vrijdagnacht</h1>
+				<h2>Tsar Wars</h2>
+			</div>
+
+			<div id='excursie' class='slide-title'>
+				<h1><span>15</span> vrijdagmiddag</h1>
+				<h2>Ekskurzyi</h2>
+			</div>
+
+			<div id='brusjesdag' class='slide-title left'>
+				<h1><span>16</span> zaterdag</h1>
+				<h2>Bruzjesdag</h2>
+			</div>
+
+			<div id='spellen' class='slide-title'>
+				<h1><span>17</span> zondag</h1>
+				<h2>Geszelschap<br />Speylen<br />Geszelschap</h2>
+			</div>
+
+			<div id='hv' class='slide-title left'>
+				<h1><span>18</span> maandag</h1>
+				<h2>Huishoudlyk<br />Vergadring</h2>
+			</div>
+
+			<div id='cabaret' class='slide-title left'>
+				<h1><span>19</span> dinsdag</h1>
+				<h2>Kabarad</h2>
+			</div>
+
+			<div id='turbokring' class='slide-title left'>
+				<h1><span>20</span> woensdag</h1>
+				<h2>Turbokring</h2>
+			</div>
+
+			<div id='verticalenstrijd' class='slide-title left'>
+				<h1><span>21</span> donderdag</h1>
+				<h2>Stryd z Vertikalny</h2>
+			</div>
+
+			<div id='gala' class='slide-title left'>
+				<h1><span>22</span> vrijdag</h1>
+				<h2>Gala</h2>
+			</div>
+
+			<div id='dedebrunch' class='slide-title'>
+				<h1><span>23</span> zaterdag</h1>
+				<h2>D&eacuteD&eacute Bryunsz</h2>
+			</div>
+		</div>
+	</body>
+</html>

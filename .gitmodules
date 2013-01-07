@@ -1,0 +1,3 @@
+[submodule "vendor/InkNode"]
+	path = vendor/InkNode
+	url = ssh://git@inkworks.nl:32/InkNode.git

@@ -1,0 +1,151 @@
+@font-face {
+  font-family: "Ornamental Versals";
+  src: url("../fonts/ornamentalversals_black.ttf"); }
+
+@font-face {
+  font-family: "Chopin Script";
+  src: url("../fonts/chopinscript.otf"); }
+
+@font-face {
+  font-family: "Trajan Pro";
+  src: url("../fonts/trajanpro.otf"); }
+
+@font-face {
+  font-family: "Trajan Pro";
+  font-weight: bold;
+  src: url("../fonts/trajanpro_bold.otf"); }
+
+@font-face {
+  font-family: "Gothic I";
+  src: url("../fonts/gothici.ttf"); }
+
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  background: #0f0f11;
+  overflow: hidden; }
+
+img#logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: 105px;
+  margin-top: -303px; }
+
+div#window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 950px;
+  height: 490px;
+  margin-left: -475px;
+  margin-top: -245px;
+  overflow: hidden; }
+  div#window div#background {
+    z-index: 1;
+    width: 4961px;
+    height: 3508px;
+    background: transparent url("../images/background.png") no-repeat left top; }
+  div#window div.slide-title {
+    display: none;
+    z-index: 2;
+    position: absolute; }
+    div#window div.slide-title h1 {
+      position: relative;
+      margin-bottom: 8px;
+      font-family: "Ornamental Versals";
+      font-size: 18pt;
+      letter-spacing: 2px;
+      text-align: right;
+      background-color: #0f0f11;
+      color: transparent;
+      text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.4);
+      -webkit-background-clip: text;
+      -moz-background-clip: text;
+      background-clip: text; }
+      div#window div.slide-title h1 span {
+        font-family: "Gothic I";
+        font-size: 26pt; }
+    div#window div.slide-title h2 {
+      position: relative;
+      margin-top: 0px;
+      text-shadow: -1px 0 #0a7059, 0 1px #0a7059, 1px 0 #0a7059, 0 -1px #0a7059;
+      color: #12c49b;
+      font-family: "Chopin Script";
+      font-size: 35pt;
+      letter-spacing: 1px;
+      text-align: left; }
+    div#window div.slide-title.left h1 {
+      text-align: left; }
+    div#window div.slide-title.left h2 {
+      text-align: right; }
+  div#window div#black {
+    z-index: 99;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: black; }
+  div#window div#foreground {
+    z-index: 100;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: transparent url("../images/foreground.png") no-repeat left top; }
+
+div#leo {
+  top: 30px;
+  right: 100px; }
+
+div#receptie {
+  top: 30px;
+  right: 100px; }
+
+div#lezing {
+  top: 30px;
+  right: 100px; }
+
+div#tsarwars {
+  top: 30px;
+  right: 100px; }
+
+div#excursie {
+  top: 30px;
+  left: 90px; }
+
+div#brusjesdag {
+  top: 30px;
+  left: 400px; }
+
+div#spellen {
+  top: 30px;
+  left: 90px; }
+
+div#hv {
+  top: 30px;
+  left: 100px; }
+
+div#cabaret {
+  top: 30px;
+  left: 100px; }
+
+div#turbokring {
+  top: 30px;
+  left: 300px; }
+
+div#verticalenstrijd {
+  top: 30px;
+  left: 200px; }
+
+div#gala {
+  top: 30px;
+  left: 80px; }
+
+div#dedebrunch {
+  top: 30px;
+  right: 100px; }
