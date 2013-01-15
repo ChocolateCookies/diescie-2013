@@ -17,8 +17,9 @@
     Copyright 2012, Joel Besada
     MIT Licensed (http://www.opensource.org/licenses/mit-license.php)
 */
-( function ( $, window, document, undefined ) {
-	var	PREFIX =  "-" + getVendorPrefix().toLowerCase() + "-",
+define([ "Timer", "Timers", "jQuery/jQuery" ], function( Timer, Timers ) {
+	var	$ = jQuery,
+		PREFIX =  "-" + getVendorPrefix().toLowerCase() + "-",
 		HAS_TRANSFORM_SUPPORT = supportsTransforms(),
 		HAS_CANVAS_SUPPORT = supportsCanvas(),
 		FPS = 60,
@@ -34,6 +35,7 @@
 		element,
 		scrollBar,
 		scrollHandle,
+		animIntervals = new Timers(),
 
 		// Default speeds for scrolling and rotating (with path.rotate())
 		speeds = {
@@ -99,6 +101,18 @@
 				}
 				animateSteps( distance, duration, easing, callback );
 				return this;
+			},
+
+			stop: function() {
+				stopAnim();
+			},
+
+			pause: function() {
+				pauseAnim();
+			},
+
+			resume: function() {
+				resumeAnim();
 			}
 		};
 	
@@ -416,6 +430,8 @@
 
 	/* Handles key scrolling (arrows and space) */
 	function keyHandler( e ) {
+		// Disable scrolling with keys when scroll is disabled
+		if ( settings.scroll === false ) return;
 		// Disable scrolling with keys when user has focus on text input elements
 		if ( /^text/.test( e.target.type ) ) return;
 		switch ( e.keyCode ) {
@@ -472,20 +488,36 @@
 			currentFrame = 0,
 			easedSteps,
 			nextStep,
-			interval = setInterval(function() {
+			interval = animIntervals.add(function() {
 				easedSteps = Math.round( ($.easing[easing] || $.easing.swing)( ++currentFrame / frames, duration / frames * currentFrame, 0, steps, duration) );
 				nextStep = wrapStep( startStep + easedSteps);
 				if (currentFrame === frames) {
-					clearInterval( interval );
+					isAnimating = false;
+					interval.stop();
+
 					if ( typeof easing === "function" ) {
 						easing();
 					} else if ( callback ) {
 						callback();
 					}
-					isAnimating = false;
 				}
 				scrollToStep( nextStep, true );
-			}, duration / frames);
+			}, duration / frames, true);
+	}
+
+	function stopAnim() {
+		animIntervals.stop()
+		isAnimating = false;
+	}
+
+	function pauseAnim() {
+		animIntervals.pause()
+		isAnimating = false;
+	}
+
+	function resumeAnim() {
+		animIntervals.resume()
+		isAnimating = true;
 	}
 
 	/* Scrolls to a specified step */
@@ -642,4 +674,4 @@
 		return Math.sqrt( x * x + y * y );
 	}
 
-})( jQuery, window, document );
+});

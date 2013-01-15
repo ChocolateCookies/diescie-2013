@@ -43,13 +43,31 @@
 	@include background-clip( text );
 }
 
-$light-gray: #f9f9f9;
+@mixin transition($transition-property, $transition-time, $method) {
+	-webkit-transition: $transition-property $transition-time $method;
+	-moz-transition: $transition-property $transition-time $method;
+	-ms-transition: $transition-property $transition-time $method;
+	-o-transition: $transition-property $transition-time $method;
+	transition: $transition-property $transition-time $method;
+}
+
+@mixin opacity($value) {
+	opacity: $value;
+	filter: alpha(opacity=$value*100);
+	-ms-filter: "alpha(opacity=#{$value*100})";
+	-khtml-opacity: $value;
+	-moz-opacity: $value;
+}
+
+$light-gray: #b2b2b2;
+$shade-gray: #2f2f2f;
 $dark-gray: #0f0f11;
-
-$title-gray: #6f6f6f;
-
+$title-gray: #626262;
 $turquoise: #12c49b;
 $dark-turq: darken( $turquoise, 18% );
+
+$window-width: 950px;
+$window-height: 490px;
 
 body {
 	width: 100%;
@@ -72,17 +90,59 @@ img#logo {
 	margin-top: -303px;
 }
 
+h1 {
+	font-family: "Ornamental Versals";
+	font-size: 18pt;
+	letter-spacing: 2px;
+
+	span {
+		font-family: "Gothic I";
+		font-size: 26pt;
+	}
+}
+
+h2 {
+
+	font-family: "Chopin Script";
+	font-size: 35pt;
+	letter-spacing: 1px;
+}
+
+a {
+	font-family: "Ornamental Versals";
+	font-size: 16pt;
+	letter-spacing: 2px;
+
+	color: $light-gray;
+	text-decoration: none;
+
+	@include transition( color, 0.3s, linear );
+}
+
+a:hover {
+	color: white;
+}
+
+button {
+	border: none;
+	outline: none;
+
+	background: transparent;
+
+	cursor: pointer;
+}
+
 div#window {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 
-	width: 950px;
-	height: 490px;
+	width: $window-width;
+	height: $window-height;
 
 	margin: {
-		left: -475px;
-		top: -245px;
+		left: $window-width / -2;
+		top: $window-height / -2;
 	}
 
 	overflow: hidden;
@@ -108,17 +168,11 @@ div#window {
 
 			margin-bottom: 8px;
 
-			font-family: "Ornamental Versals";
-			font-size: 18pt;
-			letter-spacing: 2px;
 			text-align: right;
 
-			@include inset-text-shadow( $dark-gray, 0.4 );
-
-			span {
-				font-family: "Gothic I";
-				font-size: 26pt;
-			}
+			text-shadow: -1px 0 $shade-gray, 0 1px $shade-gray, 1px 0 $shade-gray, 0 -1px $shade-gray;
+			color: $title-gray;
+			//@include inset-text-shadow( $dark-gray, 0.4 );
 		}
 
 		h2 {
@@ -129,9 +183,6 @@ div#window {
 			text-shadow: -1px 0 $dark-turq, 0 1px $dark-turq, 1px 0 $dark-turq, 0 -1px $dark-turq;
 			color: $turquoise;
 
-			font-family: "Chopin Script";
-			font-size: 35pt;
-			letter-spacing: 1px;
 			text-align: left;
 		}
 
@@ -146,7 +197,7 @@ div#window {
 	}
 
 	div#black {
-		z-index: 99;
+		z-index: 98;
 
 		position: absolute;
 		top: 0px;
@@ -159,7 +210,7 @@ div#window {
 	}
 
 	div#foreground {
-		z-index: 100;
+		z-index: 99;
 
 		position: absolute;
 		top: 0px;
@@ -169,6 +220,81 @@ div#window {
 		height: 100%;
 
 		background: transparent url("../images/foreground.png") no-repeat left top;
+	}
+
+	div#controls {
+		z-index: 100;
+
+		position: absolute;
+		bottom: 25px;
+		right: 25px;
+
+		button {
+			display: none;
+
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+
+			width: 50px;
+			height: 50px;
+			margin: 0px;
+
+			color: $turquoise;
+			font-family: Helvetica, Verdana, Arial, sans-serif;
+			text-shadow: -1px 0 $dark-turq, 0 1px $dark-turq, 1px 0 $dark-turq, 0 -1px $dark-turq;
+			vertical-align: middle;
+
+			@include opacity( 0.6 );
+
+			@include transition( opacity, 0.5s, linear);
+
+			&#play {
+				font-size: 22pt;
+			}
+
+			&#pause {
+				font-size: 26pt;
+				margin-bottom: -2px;
+			}
+
+			&#replay {
+				font-size: 25pt;
+				margin-bottom: -3px;
+			}
+
+			&:hover {
+				@include opacity( 1 );
+			}
+		}
+	}
+}
+
+$menu-height: 40px;
+$contract-width: 40px;
+
+div#menu {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	width: $window-width;
+	height: $menu-height;
+
+	margin: {
+		top: $window-height / 2;
+		left: $window-width / -2;
+	}
+	padding: 7px 0px;
+
+	width: $window-width;
+
+	font-size: 18pt;
+	color: $light-gray;
+	text-align: center;
+
+	a {
+		padding: 5px;
 	}
 }
 
@@ -216,7 +342,7 @@ div#hv {
 }
 
 div#cabaret {
-	top: $deftop;
+	top: 65px;
 	left: 100px;
 }
 

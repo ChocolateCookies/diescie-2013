@@ -1,8 +1,12 @@
 
 define [
+	"cs!Timer"
+	"cs!Timers"
+	"jQuery/jQuery"
 	"jQuery/ScrollPath"
 	"jQuery/Easing"
-], () ->
+	"jQuery/Pause"
+], ( Timer, Timers ) ->
 	
 	BG_SEL = "div#background"
 	FG_SEL = "div#foreground"
@@ -55,7 +59,7 @@ define [
 
 	CABARET_1 = 14000
 	CABARET_2 = 9000
-	CABARET_TEXT = 2000
+	CABARET_TEXT = 3000
 
 	TURBO_1 = 10000
 	TURBO_2 = 1500 # pause
@@ -82,13 +86,79 @@ define [
 	class AnimationControl
 		constructor: ->
 			@_fade_timer = null
+			@_timers = new Timers()
+			@_current_scene = null;
 
 			@_init_scrollpath()
-			
-		reboot: ->
-			@_fadeout_in( BLACK_DUR, => @start() )
 
-		start: ->
+			jQuery( "button#play" ).on "click", =>
+				@continue()
+				@_ctrl_pause()
+
+			jQuery( "button#pause" ).on "click", =>
+				@stop()
+				@_ctrl_play()
+
+			jQuery( "button#replay" ).on "click", =>
+				@reboot()
+				@_ctrl_pause()
+			
+		select: ( scene ) ->
+			scene = "_#{scene}";
+			if typeof @[ scene ] is "function"
+				@_fadeout_in( BLACK_DUR, => 
+					@_reset_text()
+					@[ scene ]() 
+				)
+				@_ctrl_pause()
+			else
+				jQuery.error( "#{scene} is not a valid scene" )
+
+		reboot: ->
+			@select( "start" )
+
+		continue: ->
+			@select( @_current_scene )
+
+		current_scene: ->
+			return @_current_scene
+
+		_ctrl_play: ->
+			jQuery( "div#controls button" ).hide()
+			jQuery( "button#play" ).show()
+		
+		_ctrl_pause: ->
+			jQuery( "div#controls button" ).hide()
+			jQuery( "button#pause" ).show()
+
+		_ctrl_replay: ->
+			jQuery( "div#controls button" ).hide()
+			jQuery( "button#replay" ).show()
+
+		_reset_text: ->
+			jQuery( "div.slide-title" ).fadeTo( 0, 0 )
+				.children().removeAttr( "style" )
+
+		stop: ->
+			@_timers.stop()
+			jQuery( "div.slide-title > *" ).stop()
+			@_fade_timer.stop()
+			jQuery( "div#black" ).stop()
+			jQuery.fn.scrollPath( "stop" )
+
+		pause: ->
+			@_timers.pause()
+			jQuery( "div.slide-title > *" ).pause()
+			jQuery.fn.scrollPath( "pause" )
+
+		resume: ->
+			@_timers.resume()
+			jQuery( "div.slide-title > *" ).resume()
+			jQuery.fn.scrollPath( "resume" )
+
+		_start: ->
+			@_current_scene = "start"
+
 			now = 0
 			@_scrollto( "start" )
 
@@ -97,10 +167,12 @@ define [
 			now+=START_1
 
 			@_timeout( =>
-				@_fadeout_in( BLACK_DUR, => @leo() )
+				@_fadeout_in( BLACK_DUR, => @_leo() )
 			, now-FADEIN_DUR )
 
-		leo: ->
+		_leo: ->
+			@_current_scene = "leo";
+
 			now = 0
 			@_scrollto( "leo" )
 
@@ -128,10 +200,12 @@ define [
 			now+=LEO_3
 
 			@_timeout( =>
-				@receptie()
+				@_receptie()
 			, now )
 
-		receptie: ->
+		_receptie: ->
+			@_current_scene = "receptie";
+
 			now = 0
 			@_scrollto( "receptie" )
 			
@@ -157,10 +231,12 @@ define [
 			now+=RECEPTIE_3
 
 			@_timeout( =>
-				@lezing()
+				@_lezing()
 			, now )
 
-		lezing: ->
+		_lezing: ->
+			@_current_scene = "lezing";
+
 			now = 0
 			@_scrollto( "lezing" )
 
@@ -186,10 +262,12 @@ define [
 			now+=LEZING_3
 
 			@_timeout( =>
-				@tsarwars()
+				@_tsarwars()
 			, now )
 
-		tsarwars: ->
+		_tsarwars: ->
+			@_current_scene = "tsarwars";
+
 			now = 0
 			@_scrollto( "tsarwars" )
 
@@ -215,10 +293,12 @@ define [
 			now+=TSARWARS_3
 
 			@_timeout( =>
-				@excursie()
+				@_excursie()
 			, now )
 
-		excursie: ->
+		_excursie: ->
+			@_current_scene = "excursie";
+
 			now = 0
 			@_scrollto( "excursie" )
 
@@ -235,10 +315,12 @@ define [
 			, EXCURSIE_TEXT )
 
 			@_timeout( =>
-				@brusjesdag()
+				@_brusjesdag()
 			, now )
 
-		brusjesdag: ->
+		_brusjesdag: ->
+			@_current_scene = "brusjesdag";
+
 			now = 0
 			@_scrollto( "brusjesdag" )
 
@@ -255,10 +337,12 @@ define [
 			, BRUSJES_TEXT )
 
 			@_timeout( =>
-				@spellen()
+				@_spellen()
 			, now )
 
-		spellen: ->
+		_spellen: ->
+			@_current_scene = "spellen";
+
 			now = 0
 			@_scrollto( "spellen" )
 
@@ -280,10 +364,12 @@ define [
 			now+=SPELLEN_2
 
 			@_timeout( =>
-				@hv()
+				@_hv()
 			, now )
 
-		hv: ->
+		_hv: ->
+			@_current_scene = "hv";
+
 			now = 0
 			@_scrollto( "hv" )
 
@@ -303,22 +389,22 @@ define [
 			now+=HV_2
 
 			@_timeout( =>
-				@cabaret()
+				@_cabaret()
 			, now )
 
-		cabaret: ->
+		_cabaret: ->
+			@_current_scene = "cabaret";
+
 			now = 0
 			@_scrollto( "cabaret" )
 
 			# pan through cabaret
-			@_scrollto( "cabaret_1", CABARET_1, "easeOutSine" )
+			@_scrollto( "cabaret_1", CABARET_1, "linear" )
 			now+=CABARET_1
 
 			# show text
 			@_timeout( =>
-				@_showtext( "cabaret" 
-					reverse: true
-				)
+				@_showtext( "cabaret" )
 			, CABARET_TEXT )
 
 			# continue up the big stairs
@@ -328,10 +414,12 @@ define [
 			now+=CABARET_2
 
 			@_timeout( =>
-				@turbokring()
+				@_turbokring()
 			, now )
 
-		turbokring: ->
+		_turbokring: ->
+			@_current_scene = "turbokring";
+
 			now = 0
 			@_scrollto( "turbokring" )
 
@@ -376,10 +464,12 @@ define [
 			now+=TURBO_5
 
 			@_timeout( =>
-				@verticalenstrijd()
+				@_verticalenstrijd()
 			, now )
 
-		verticalenstrijd: ->
+		_verticalenstrijd: ->
+			@_current_scene = "verticalenstrijd";
+
 			now = 0
 			@_scrollto( "verticalenstrijd" )
 
@@ -415,10 +505,12 @@ define [
 			, STRIJD_TEXT )
 
 			@_timeout( =>
-				@gala()
+				@_gala()
 			, now )
 
-		gala: ->
+		_gala: ->
+			@_current_scene = "gala";
+
 			now = 0
 			@_scrollto( "gala" )
 
@@ -446,10 +538,12 @@ define [
 			, GALA_TEXT )
 
 			@_timeout( =>
-				@dedebrunch()
+				@_dedebrunch()
 			, now )
 
-		dedebrunch: ->
+		_dedebrunch: ->
+			@_current_scene = "dedebrunch";
+
 			now = 0
 			@_scrollto( "dedebrunch" )
 
@@ -461,8 +555,14 @@ define [
 			@_timeout( =>
 				@_showtext( "dedebrunch" 
 					duration: 6000
+					reverse: true
 				)
 			, BRUNCH_TEXT )
+			now+=BRUNCH_TEXT
+
+			@_timeout( =>
+				@_ctrl_replay()
+			, now )
 
 		_showtext: ( target, options = {} ) ->
 			# define default options
@@ -474,7 +574,6 @@ define [
 			# direction of animated text
 			h1Left = if options.reverse then "-=150" else "+=150"
 			h2Left = if options.reverse then "+=150" else "-=150"
-			console.log(h2Left)
 
 			el = jQuery( "div##{target}" )
 			el.fadeTo( 400, 1 )
@@ -497,8 +596,8 @@ define [
 		_scrollto: ( target, duration, callback ) ->
 			jQuery.fn.scrollPath( "scrollTo", target, duration*SPEED, callback )
 
-		_timeout: ->
-			window.setTimeout( arguments... )
+		_timeout: ( cb, delay ) ->
+			@_timers.add( cb, delay )
 
 		_fadeout: ( cb = -> ) ->
 			jQuery( BLACK_SEL ).stop().fadeTo( 500, 1, cb )
@@ -506,21 +605,22 @@ define [
 		_fadein: ( cb = -> ) ->
 			jQuery( BLACK_SEL ).stop().fadeTo( 550, 0, cb )
 
-		_fadeout_in: ( timeMs = 250, cb1, cb2 ) ->
-			window.clearTimeout @_fade_timer
+		_fadeout_in: ( delay = 250, cb1, cb2 ) ->
+			if @_fade_timer?
+				@_fade_timer.stop()
 
 			@_fadeout( =>
-				@_fade_timer = window.setTimeout( =>
+				@_fade_timer = new Timer( =>
 					if cb1? then cb1()
 					@_fadein( cb2 )
-				, timeMs )
+				, delay )
 			)
 
 		_init_scrollpath: ->
 			PI = Math.PI
 
 			# Intro
-			P0 = { x:480, y:3270 }
+			P0 = { x:480, y:3250 }
 			P01 = { x:900, y:P0.y }
 
 			# LeO

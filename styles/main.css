@@ -34,6 +34,40 @@ img#logo {
   margin-left: 105px;
   margin-top: -303px; }
 
+h1 {
+  font-family: "Ornamental Versals";
+  font-size: 18pt;
+  letter-spacing: 2px; }
+  h1 span {
+    font-family: "Gothic I";
+    font-size: 26pt; }
+
+h2 {
+  font-family: "Chopin Script";
+  font-size: 35pt;
+  letter-spacing: 1px; }
+
+a {
+  font-family: "Ornamental Versals";
+  font-size: 16pt;
+  letter-spacing: 2px;
+  color: #b2b2b2;
+  text-decoration: none;
+  -webkit-transition: color 0.3s linear;
+  -moz-transition: color 0.3s linear;
+  -ms-transition: color 0.3s linear;
+  -o-transition: color 0.3s linear;
+  transition: color 0.3s linear; }
+
+a:hover {
+  color: white; }
+
+button {
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer; }
+
 div#window {
   position: absolute;
   top: 50%;
@@ -55,34 +89,21 @@ div#window {
     div#window div.slide-title h1 {
       position: relative;
       margin-bottom: 8px;
-      font-family: "Ornamental Versals";
-      font-size: 18pt;
-      letter-spacing: 2px;
       text-align: right;
-      background-color: #0f0f11;
-      color: transparent;
-      text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.4);
-      -webkit-background-clip: text;
-      -moz-background-clip: text;
-      background-clip: text; }
-      div#window div.slide-title h1 span {
-        font-family: "Gothic I";
-        font-size: 26pt; }
+      text-shadow: -1px 0 #2f2f2f, 0 1px #2f2f2f, 1px 0 #2f2f2f, 0 -1px #2f2f2f;
+      color: #626262; }
     div#window div.slide-title h2 {
       position: relative;
       margin-top: 0px;
       text-shadow: -1px 0 #0a7059, 0 1px #0a7059, 1px 0 #0a7059, 0 -1px #0a7059;
       color: #12c49b;
-      font-family: "Chopin Script";
-      font-size: 35pt;
-      letter-spacing: 1px;
       text-align: left; }
     div#window div.slide-title.left h1 {
       text-align: left; }
     div#window div.slide-title.left h2 {
       text-align: right; }
   div#window div#black {
-    z-index: 99;
+    z-index: 98;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -90,13 +111,70 @@ div#window {
     height: 100%;
     background: black; }
   div#window div#foreground {
-    z-index: 100;
+    z-index: 99;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
     background: transparent url("../images/foreground.png") no-repeat left top; }
+  div#window div#controls {
+    z-index: 100;
+    position: absolute;
+    bottom: 25px;
+    right: 25px; }
+    div#window div#controls button {
+      display: none;
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 50px;
+      height: 50px;
+      margin: 0px;
+      color: #12c49b;
+      font-family: Helvetica, Verdana, Arial, sans-serif;
+      text-shadow: -1px 0 #0a7059, 0 1px #0a7059, 1px 0 #0a7059, 0 -1px #0a7059;
+      vertical-align: middle;
+      opacity: 0.6;
+      filter: alpha(opacity=60);
+      -ms-filter: "alpha(opacity=60)";
+      -khtml-opacity: 0.6;
+      -moz-opacity: 0.6;
+      -webkit-transition: opacity 0.5s linear;
+      -moz-transition: opacity 0.5s linear;
+      -ms-transition: opacity 0.5s linear;
+      -o-transition: opacity 0.5s linear;
+      transition: opacity 0.5s linear; }
+      div#window div#controls button#play {
+        font-size: 22pt; }
+      div#window div#controls button#pause {
+        font-size: 26pt;
+        margin-bottom: -2px; }
+      div#window div#controls button#replay {
+        font-size: 25pt;
+        margin-bottom: -3px; }
+      div#window div#controls button:hover {
+        opacity: 1;
+        filter: alpha(opacity=100);
+        -ms-filter: "alpha(opacity=100)";
+        -khtml-opacity: 1;
+        -moz-opacity: 1; }
+
+div#menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 950px;
+  height: 40px;
+  margin-top: 245px;
+  margin-left: -475px;
+  padding: 7px 0px;
+  width: 950px;
+  font-size: 18pt;
+  color: #b2b2b2;
+  text-align: center; }
+  div#menu a {
+    padding: 5px; }
 
 div#leo {
   top: 30px;
@@ -131,7 +209,7 @@ div#hv {
   left: 100px; }
 
 div#cabaret {
-  top: 30px;
+  top: 65px;
   left: 100px; }
 
 div#turbokring {
