@@ -1,0 +1,146 @@
+/**
+ * CSS3 Border-Radius
+ *
+ * @param $topLeft Either the top left radius, if no other param provided, this value is applied for all params
+ * @param $topRight [optional]
+ * @param $bottomRight [optional]
+ * @param $bottomLeft [optional]
+ */
+@mixin border-radius($topLeft, $topRight : null, $bottomRight : null, $bottomLeft : null) {
+    @if $topRight == null and $bottomRight == null and $bottomLeft == null {
+        $topRight : $topLeft;
+        $bottomRight : $topLeft;
+        $bottomLeft: $topLeft;
+    } @else if $bottomRight == null and $bottomLeft == null {
+        $bottomRight : 0;
+        $bottomLeft : 0;
+    } @else if $bottomLeft == null {
+        $bottomLeft : 0;
+    }
+    -moz-border-radius-topleft: $topLeft;
+    -moz-border-radius-topright: $topRight;
+    -moz-border-radius-bottomright: $bottomRight;
+    -moz-border-radius-bottomleft: $bottomLeft;
+    -webkit-border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+    border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+}
+ 
+/**
+ * CSS3 Box-Shadow
+ *
+ * @param $inset Either true or false
+ * @param $x
+ * @param $y
+ * @param $blur
+ * @param $spread
+ * @param $color
+ */
+@mixin box-shadow($inset, $x, $y, $blur, $spread, $color) {
+    @if $inset == true {
+        $inset : inset;
+    } @else {
+        $inset :"";
+    }
+    -webkit-box-shadow: #{$inset} $x $y $blur $spread $color;
+    -moz-box-shadow: #{$inset} $x $y $blur $spread $color;
+    box-shadow: #{$inset} $x $y $blur $spread $color;
+}
+ 
+/**
+ * CSS3 Text-Shadow
+ * @param $x
+ * @param $y
+ * @param $blur
+ * @param $color
+ */
+@mixin text-shadow($x, $y, $blur, $color) {
+    text-shadow: $x $y $blur $color;
+    filter: dropshadow(color=#{$color}, offx=#{$x}, offy=#{$y});
+}
+ 
+/**
+ * CSS3 Multi-Column Layout
+ * @param $columns
+ * @param $gap
+ */
+@mixin columns($columns, $gap) {
+    -moz-column-count: $columns;
+    -moz-column-gap: $gap;
+    -webkit-column-count: $columns;
+    -webkit-column-gap: $gap;
+    column-count: $columns;
+    column-gap: $gap;   
+}
+ 
+/**
+ * CSS3 Outline
+ * @param $thickness
+ * @param $style
+ * @param $color
+ * @param $offset [optional]
+ */
+@mixin outline($thickness, $style, $color, $offset : null) {
+    outline: $thickness $style $color;
+    @if $offset != null {
+        outline-offset: $offset; /*Delete if you don't want an offset*/
+    }
+}
+ 
+/**
+ * CSS3 Transition
+ * @param $property
+ * @param $duration
+ * @param $function [optional]
+ */
+@mixin transition($property, $duration, $function : ease) {
+    -webkit-transition: $property $duration $function;
+    -moz-transition: $property $duration $function;
+	-ms-transition: $property $duration $function;
+    -o-transition: $property $duration $function;
+    transition: $property $duration $function;
+}
+ 
+/**
+ * CSS3 Transformation
+ * @param $scale
+ * @param $rotate
+ * @param $translate
+ * @param $skew
+ */
+@mixin transform($scale, $rotate, $translateX, $translateY, $skewX, $skewY) {
+    -moz-transform: scale($scale) rotate($rotate) translate($translateX, $translateY) skew($skewX, $skewY);
+    -webkit-transform: scale($scale) rotate($rotate) translate($translateX, $translateY) skew($skewX, $skewY);
+    -o-transform: scale($scale) rotate($rotate) translate($translateX, $translateY) skew($skewX, $skewY);
+    -ms-transform: scale($scale) rotate($rotate) translate($translateX, $translateY) skew($skewX, $skewY);
+    transform: scale($scale) rotate($rotate) translate($translateX, $translateY) skew($skewX, $skewY);
+}
+ 
+/**
+ * CSS3 Background Gradient
+ * @param $color1
+ * @param $color2
+ */
+@mixin gradient($color1, $color2) {
+    background: -moz-linear-gradient(top, $color1 0%, $color2 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$color1), color-stop(100%,$color2)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, $color1 0%,$color2 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, $color1 0%,$color2 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, $color1 0%,$color2 100%); /* IE10+ */
+    background: linear-gradient(top, $color1 0%,$color2 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$color1}', endColorstr='#{$color2}',GradientType=0 ); /* IE6-9 */
+}
+@mixin background-clip($type) {
+	-webkit-background-clip: $type;
+	-moz-background-clip: $type;
+	background-clip: $type;
+}
+@mixin opacity($value) {
+	opacity: $value;
+	filter: alpha(opacity=$value*100);
+	-ms-filter: "alpha(opacity=#{$value*100})";
+	-khtml-opacity: $value;
+	-moz-opacity: $value;
+}
+@mixin text-border( $color ) {
+	text-shadow: -1px 0 $color, 0 1px $color, 1px 0 $color, 0 -1px $color;
+}

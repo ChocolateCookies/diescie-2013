@@ -1,3 +1,5 @@
+@import "_mixins.scss";
+
 @font-face {
 	font-family: "Ornamental Versals";
 	src: url("../fonts/ornamentalversals_black.ttf");
@@ -24,50 +26,37 @@
 	src: url("../fonts/gothici.ttf");
 }
 
-@mixin box-shadow($top, $left, $blur, $color, $inset:"") {
-      -webkit-box-shadow:$top $left $blur $color #{$inset};
-      -moz-box-shadow:$top $left $blur $color #{$inset};
-      box-shadow:$top $left $blur $color #{$inset};
-}
-
-@mixin background-clip($type) {
-	-webkit-background-clip: $type;
-	-moz-background-clip: $type;
-	background-clip: $type;
-}
-
-@mixin inset-text-shadow($color, $opacity: 0.6) {
-	background-color: $color;
-	color: transparent;
-	text-shadow: 0px 2px 3px rgba( white, $opacity );
-	@include background-clip( text );
-}
-
-@mixin transition($transition-property, $transition-time, $method) {
-	-webkit-transition: $transition-property $transition-time $method;
-	-moz-transition: $transition-property $transition-time $method;
-	-ms-transition: $transition-property $transition-time $method;
-	-o-transition: $transition-property $transition-time $method;
-	transition: $transition-property $transition-time $method;
-}
-
-@mixin opacity($value) {
-	opacity: $value;
-	filter: alpha(opacity=$value*100);
-	-ms-filter: "alpha(opacity=#{$value*100})";
-	-khtml-opacity: $value;
-	-moz-opacity: $value;
-}
-
 $light-gray: #b2b2b2;
 $shade-gray: #2f2f2f;
 $dark-gray: #0f0f11;
 $title-gray: #626262;
 $turquoise: #12c49b;
+$shade-turq: #00a170;
 $dark-turq: darken( $turquoise, 18% );
 
 $window-width: 950px;
 $window-height: 490px;
+
+@mixin font-sans {
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+}
+
+@mixin font-chopin {
+	font-family: "Chopin Script", "Times New Roman", Times, Arial, serif;
+	font-size: 35pt;
+	letter-spacing: 1px;
+}
+
+@mixin font-mental {
+	font-family: "Ornamental Versals", Georgia, serif;
+	font-size: 18pt;
+	letter-spacing: 2px;
+}
+
+@mixin font-gothic {
+	font-family: "Gothic I", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-size: 26pt;
+}
 
 body {
 	width: 100%;
@@ -76,8 +65,9 @@ body {
 	padding: 0px;
 	margin: 0px;
 
-	background: $dark-gray;
+	@include font-sans;
 
+	background: $dark-gray;
 	overflow: hidden;
 }
 
@@ -91,36 +81,19 @@ img#logo {
 }
 
 h1 {
-	font-family: "Ornamental Versals";
-	font-size: 18pt;
-	letter-spacing: 2px;
+	@include font-mental;
 
 	span {
-		font-family: "Gothic I";
-		font-size: 26pt;
+		@include font-gothic;
 	}
 }
 
 h2 {
-
-	font-family: "Chopin Script";
-	font-size: 35pt;
-	letter-spacing: 1px;
+	@include font-chopin;
 }
 
 a {
-	font-family: "Ornamental Versals";
-	font-size: 16pt;
-	letter-spacing: 2px;
-
-	color: $light-gray;
-	text-decoration: none;
-
-	@include transition( color, 0.3s, linear );
-}
-
-a:hover {
-	color: white;
+	@include transition( color, 0.2s, linear );
 }
 
 button {
@@ -170,9 +143,8 @@ div#window {
 
 			text-align: right;
 
-			text-shadow: -1px 0 $shade-gray, 0 1px $shade-gray, 1px 0 $shade-gray, 0 -1px $shade-gray;
+			@include text-border( $shade-gray );
 			color: $title-gray;
-			//@include inset-text-shadow( $dark-gray, 0.4 );
 		}
 
 		h2 {
@@ -180,7 +152,7 @@ div#window {
 
 			margin-top: 0px;
 
-			text-shadow: -1px 0 $dark-turq, 0 1px $dark-turq, 1px 0 $dark-turq, 0 -1px $dark-turq;
+			@include text-border( $dark-turq );
 			color: $turquoise;
 
 			text-align: left;
@@ -197,7 +169,7 @@ div#window {
 	}
 
 	div#black {
-		z-index: 98;
+		z-index: 100;
 
 		position: absolute;
 		top: 0px;
@@ -209,8 +181,8 @@ div#window {
 		background: black;
 	}
 
-	div#foreground {
-		z-index: 99;
+	svg#foreground {
+		z-index: 106;
 
 		position: absolute;
 		top: 0px;
@@ -219,15 +191,17 @@ div#window {
 		width: 100%;
 		height: 100%;
 
+		pointer-events: none;
+
 		background: transparent url("../images/foreground.png") no-repeat left top;
 	}
 
 	div#controls {
-		z-index: 100;
+		z-index: 102;
 
 		position: absolute;
-		bottom: 25px;
-		right: 25px;
+		bottom: 35px;
+		right: 40px;
 
 		button {
 			display: none;
@@ -236,21 +210,40 @@ div#window {
 			bottom: 0px;
 			right: 0px;
 
-			width: 50px;
 			height: 50px;
 			margin: 0px;
 
 			color: $turquoise;
-			font-family: Helvetica, Verdana, Arial, sans-serif;
-			text-shadow: -1px 0 $dark-turq, 0 1px $dark-turq, 1px 0 $dark-turq, 0 -1px $dark-turq;
+			@include text-border( $dark-turq );
 			vertical-align: middle;
+			text-align: right;
 
 			@include opacity( 0.6 );
 
 			@include transition( opacity, 0.5s, linear);
 
+			&:hover {
+				@include opacity( 1 );
+			}
+
 			&#play {
+				width: 300px;
+
 				font-size: 22pt;
+
+				span {
+					display: none;
+
+					padding-right: 10px;
+
+					@include font-chopin;
+					font-size: 19pt;
+					color: $turquoise;
+					vertical-align: middle;
+					line-height: 2em;
+
+					@include text-border( $dark-turq );
+				}
 			}
 
 			&#pause {
@@ -262,9 +255,146 @@ div#window {
 				font-size: 25pt;
 				margin-bottom: -3px;
 			}
+		}
+	}
 
-			&:hover {
-				@include opacity( 1 );
+	button#close-story {
+		display: none;
+
+		z-index: 104;
+
+		position: absolute;
+		top: 68px;
+		right: 120px;
+
+		width: 120px;
+
+		@include font-chopin;
+		font-size: 26pt;
+		color: $title-gray;
+
+		@include transition( color, 0.5s, linear);
+
+		&:hover {
+			color: $shade-gray;
+		}
+
+		span {
+			font-size: 20pt;
+		}
+	}
+
+	div.story {
+		display: none;
+
+		z-index: 103;
+
+		position: absolute;
+		left: 0px;
+		top: 0px;
+
+		width: $window-width;
+		height: $window-height;
+
+		overflow: auto;
+		overflow-x: hidden;
+
+		h2.story-header {
+			width: $window-width - 140px;
+			height: 146px - 55px;
+
+			margin: 0px;
+
+			padding: {
+				left: 140px;
+				top: 55px;
+			}
+
+			font-size: 40pt;
+			color: $turquoise;
+			@include text-border( $dark-turq );
+
+			background: transparent url('../images/story-header.jpg') no-repeat left top;
+		}
+		
+		div.story-body {
+			min-height: $window-height - 146px;
+			width: $window-width - 140px - 95px;
+
+			padding: {
+				left: 140px;
+				right: 95px;
+			}
+
+			@include font-chopin;
+			color: $shade-gray;
+			font-size: 22pt;
+			text-align: justify;
+
+			background: transparent url('../images/story-body.jpg') repeat left top;
+
+			p {
+				margin: 0px;
+				padding: 0.5em 0px;
+
+				line-height: 1.5em;
+
+				span.initial {
+					float: left;
+
+					padding: 0px 8px;
+
+					@include font-mental;
+					font-size: 3em;
+
+					line-height: 1em;
+				}
+			}
+
+			div.prog-dag, div.dansles {
+				margin-bottom: 20.5pt;
+
+				h1 {
+					text-transform: lowercase;
+					margin: 0px;
+					margin-bottom: -0.5em;
+
+					line-height: 3em;
+
+					@include text-shadow( 1px, 1px, 1px, darken( white, 20% ));
+
+					span {
+						font-size: 22pt;
+						line-height: 0em;
+					}
+				}
+
+				p {
+					padding: 0px;
+					padding-left: 40px;
+
+					line-height: 1.5em;
+					span {
+						padding-right: 10px;
+						font-size: 20pt;
+					}
+				}
+
+				a {
+					color: $dark-turq;
+					text-decoration: none;
+				}
+
+				a:hover {
+					color: $shade-turq;
+				}
+			}
+			
+			div.dansles {
+				padding: 20px 0px;
+				padding-bottom: 2em;
+
+				margin: 0px;
 			}
 		}
 	}
@@ -295,6 +425,16 @@ div#menu {
 
 	a {
 		padding: 5px;
+
+		@include font-mental;
+		font-size: 16pt;
+
+		color: $light-gray;
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: white;
 	}
 }
 

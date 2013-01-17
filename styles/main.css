@@ -1,3 +1,58 @@
+/**
+ * CSS3 Border-Radius
+ *
+ * @param $topLeft Either the top left radius, if no other param provided, this value is applied for all params
+ * @param $topRight [optional]
+ * @param $bottomRight [optional]
+ * @param $bottomLeft [optional]
+ */
+/**
+ * CSS3 Box-Shadow
+ *
+ * @param $inset Either true or false
+ * @param $x
+ * @param $y
+ * @param $blur
+ * @param $spread
+ * @param $color
+ */
+/**
+ * CSS3 Text-Shadow
+ * @param $x
+ * @param $y
+ * @param $blur
+ * @param $color
+ */
+/**
+ * CSS3 Multi-Column Layout
+ * @param $columns
+ * @param $gap
+ */
+/**
+ * CSS3 Outline
+ * @param $thickness
+ * @param $style
+ * @param $color
+ * @param $offset [optional]
+ */
+/**
+ * CSS3 Transition
+ * @param $property
+ * @param $duration
+ * @param $function [optional]
+ */
+/**
+ * CSS3 Transformation
+ * @param $scale
+ * @param $rotate
+ * @param $translate
+ * @param $skew
+ */
+/**
+ * CSS3 Background Gradient
+ * @param $color1
+ * @param $color2
+ */
 @font-face {
   font-family: "Ornamental Versals";
   src: url("../fonts/ornamentalversals_black.ttf"); }
@@ -24,6 +79,7 @@ body {
   height: 100%;
   padding: 0px;
   margin: 0px;
+  font-family: Helvetica, Verdana, Arial, sans-serif;
   background: #0f0f11;
   overflow: hidden; }
 
@@ -35,32 +91,24 @@ img#logo {
   margin-top: -303px; }
 
 h1 {
-  font-family: "Ornamental Versals";
+  font-family: "Ornamental Versals", Georgia, serif;
   font-size: 18pt;
   letter-spacing: 2px; }
   h1 span {
-    font-family: "Gothic I";
+    font-family: "Gothic I", "Palatino Linotype", "Book Antiqua", Palatino, serif;
     font-size: 26pt; }
 
 h2 {
-  font-family: "Chopin Script";
+  font-family: "Chopin Script", "Times New Roman", Times, Arial, serif;
   font-size: 35pt;
   letter-spacing: 1px; }
 
 a {
-  font-family: "Ornamental Versals";
-  font-size: 16pt;
-  letter-spacing: 2px;
-  color: #b2b2b2;
-  text-decoration: none;
-  -webkit-transition: color 0.3s linear;
-  -moz-transition: color 0.3s linear;
-  -ms-transition: color 0.3s linear;
-  -o-transition: color 0.3s linear;
-  transition: color 0.3s linear; }
-
-a:hover {
-  color: white; }
+  -webkit-transition: color 0.2s linear;
+  -moz-transition: color 0.2s linear;
+  -ms-transition: color 0.2s linear;
+  -o-transition: color 0.2s linear;
+  transition: color 0.2s linear; }
 
 button {
   border: none;
@@ -103,38 +151,38 @@ div#window {
     div#window div.slide-title.left h2 {
       text-align: right; }
   div#window div#black {
-    z-index: 98;
+    z-index: 100;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
     background: black; }
-  div#window div#foreground {
-    z-index: 99;
+  div#window svg#foreground {
+    z-index: 106;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
+    pointer-events: none;
     background: transparent url("../images/foreground.png") no-repeat left top; }
   div#window div#controls {
-    z-index: 100;
+    z-index: 102;
     position: absolute;
-    bottom: 25px;
-    right: 25px; }
+    bottom: 35px;
+    right: 40px; }
     div#window div#controls button {
       display: none;
       position: absolute;
       bottom: 0px;
       right: 0px;
-      width: 50px;
       height: 50px;
       margin: 0px;
       color: #12c49b;
-      font-family: Helvetica, Verdana, Arial, sans-serif;
       text-shadow: -1px 0 #0a7059, 0 1px #0a7059, 1px 0 #0a7059, 0 -1px #0a7059;
       vertical-align: middle;
+      text-align: right;
       opacity: 0.6;
       filter: alpha(opacity=60);
       -ms-filter: "alpha(opacity=60)";
@@ -145,20 +193,125 @@ div#window {
       -ms-transition: opacity 0.5s linear;
       -o-transition: opacity 0.5s linear;
       transition: opacity 0.5s linear; }
-      div#window div#controls button#play {
-        font-size: 22pt; }
-      div#window div#controls button#pause {
-        font-size: 26pt;
-        margin-bottom: -2px; }
-      div#window div#controls button#replay {
-        font-size: 25pt;
-        margin-bottom: -3px; }
       div#window div#controls button:hover {
         opacity: 1;
         filter: alpha(opacity=100);
         -ms-filter: "alpha(opacity=100)";
         -khtml-opacity: 1;
         -moz-opacity: 1; }
+      div#window div#controls button#play {
+        width: 300px;
+        font-size: 22pt; }
+        div#window div#controls button#play span {
+          display: none;
+          padding-right: 10px;
+          font-family: "Chopin Script", "Times New Roman", Times, Arial, serif;
+          font-size: 35pt;
+          letter-spacing: 1px;
+          font-size: 19pt;
+          color: #12c49b;
+          vertical-align: middle;
+          line-height: 2em;
+          text-shadow: -1px 0 #0a7059, 0 1px #0a7059, 1px 0 #0a7059, 0 -1px #0a7059; }
+      div#window div#controls button#pause {
+        font-size: 26pt;
+        margin-bottom: -2px; }
+      div#window div#controls button#replay {
+        font-size: 25pt;
+        margin-bottom: -3px; }
+  div#window button#close-story {
+    display: none;
+    z-index: 104;
+    position: absolute;
+    top: 68px;
+    right: 120px;
+    width: 120px;
+    font-family: "Chopin Script", "Times New Roman", Times, Arial, serif;
+    font-size: 35pt;
+    letter-spacing: 1px;
+    font-size: 26pt;
+    color: #626262;
+    -webkit-transition: color 0.5s linear;
+    -moz-transition: color 0.5s linear;
+    -ms-transition: color 0.5s linear;
+    -o-transition: color 0.5s linear;
+    transition: color 0.5s linear; }
+    div#window button#close-story:hover {
+      color: #2f2f2f; }
+    div#window button#close-story span {
+      font-size: 20pt; }
+  div#window div.story {
+    display: none;
+    z-index: 103;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 950px;
+    height: 490px;
+    overflow: auto;
+    overflow-x: hidden; }
+    div#window div.story h2.story-header {
+      width: 810px;
+      height: 91px;
+      margin: 0px;
+      padding-left: 140px;
+      padding-top: 55px;
+      font-size: 40pt;
+      color: #12c49b;
+      text-shadow: -1px 0 #0a7059, 0 1px #0a7059, 1px 0 #0a7059, 0 -1px #0a7059;
+      background: transparent url("../images/story-header.jpg") no-repeat left top; }
+    div#window div.story div.story-body {
+      min-height: 344px;
+      width: 715px;
+      padding-left: 140px;
+      padding-right: 95px;
+      font-family: "Chopin Script", "Times New Roman", Times, Arial, serif;
+      font-size: 35pt;
+      letter-spacing: 1px;
+      color: #2f2f2f;
+      font-size: 22pt;
+      text-align: justify;
+      background: transparent url("../images/story-body.jpg") repeat left top; }
+      div#window div.story div.story-body p {
+        margin: 0px;
+        padding: 0.5em 0px;
+        line-height: 1.5em; }
+        div#window div.story div.story-body p span.initial {
+          float: left;
+          padding: 0px 8px;
+          font-family: "Ornamental Versals", Georgia, serif;
+          font-size: 18pt;
+          letter-spacing: 2px;
+          font-size: 3em;
+          line-height: 1em; }
+      div#window div.story div.story-body div.prog-dag, div#window div.story div.story-body div.dansles {
+        margin-bottom: 20.5pt; }
+        div#window div.story div.story-body div.prog-dag h1, div#window div.story div.story-body div.dansles h1 {
+          text-transform: lowercase;
+          margin: 0px;
+          margin-bottom: -0.5em;
+          line-height: 3em;
+          text-shadow: 1px 1px 1px #cccccc;
+          filter: dropshadow(color=#cccccc, offx=1px, offy=1px); }
+          div#window div.story div.story-body div.prog-dag h1 span, div#window div.story div.story-body div.dansles h1 span {
+            font-size: 22pt;
+            line-height: 0em; }
+        div#window div.story div.story-body div.prog-dag p, div#window div.story div.story-body div.dansles p {
+          padding: 0px;
+          padding-left: 40px;
+          line-height: 1.5em; }
+          div#window div.story div.story-body div.prog-dag p span, div#window div.story div.story-body div.dansles p span {
+            padding-right: 10px;
+            font-size: 20pt; }
+        div#window div.story div.story-body div.prog-dag a, div#window div.story div.story-body div.dansles a {
+          color: #0a7059;
+          text-decoration: none; }
+        div#window div.story div.story-body div.prog-dag a:hover, div#window div.story div.story-body div.dansles a:hover {
+          color: #00a170; }
+      div#window div.story div.story-body div.dansles {
+        padding: 20px 0px;
+        padding-bottom: 2em;
+        margin: 0px; }
 
 div#menu {
   position: absolute;
@@ -174,7 +327,15 @@ div#menu {
   color: #b2b2b2;
   text-align: center; }
   div#menu a {
-    padding: 5px; }
+    padding: 5px;
+    font-family: "Ornamental Versals", Georgia, serif;
+    font-size: 18pt;
+    letter-spacing: 2px;
+    font-size: 16pt;
+    color: #b2b2b2;
+    text-decoration: none; }
+  div#menu a:hover {
+    color: white; }
 
 div#leo {
   top: 30px;

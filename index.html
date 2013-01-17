@@ -13,6 +13,7 @@
 					"jQuery/ScrollPath" : "vendor/jQueryScrollPath/script/jquery.scrollpath",
 					"jQuery/Easing" : "vendor/jQueryEasing/jquery.easing.1.3",
 					"jQuery/Pause" : "vendor/jQueryPause/jquery.pause.min",
+					"jQuery/HashChange" : "vendor/jQueryHashChange/jquery.ba-hashchange.min",
 					lib : "vendor/InkNode/lib",
 					cs : "vendor/InkNode/lib/cs",
 					"coffee-script" : "vendor/InkNode/lib/coffee-script"
@@ -28,6 +29,9 @@
 					},
 					"jQuery/Easing": {
 						deps: [ "jQuery/jQuery" ]
+					},
+					"jQuery/HashChange": {
+						deps: [ "jQuery/jQuery" ]
 					}
 				}
 			}, [ "cs!main_index" ]);
@@ -39,16 +43,24 @@
 
 	<body>
 		<img id='logo' src='images/logo-silver-300.png' alt='Russisch Royaal' width='300' height='52' />
+
+		<!-- Window element where the magic happens -->
 		<div id='window'>
+			<!-- Element with agenda picture to pan around -->
 			<div id='background'></div>
+
 			<div id='black'></div>
-			<div id='foreground'></div>
+
+			<svg id='foreground' xmlns="http://www.w3.org/2000/svg" version="1.1"></svg>
+
+			<!-- Animation control interface -->
 			<div id='controls'>
-				<button id='play'>&#9654;</button>
+				<button id='play'><span>klik om verder te gaan</span>&#9654;</button>
 				<button id='pause'>&#449;</button>
 				<button id='replay'>&#8634;</button>
 			</div>
 
+			<!-- Titles for scenes -->
 			<div id='leo' class='slide-title'>
 				<h1><span>12</span> dinsdag</h1>
 				<h2>Laudate et Orate</h2>
@@ -70,7 +82,7 @@
 			</div>
 
 			<div id='excursie' class='slide-title'>
-				<h1><span>15</span> vrijdagmiddag</h1>
+				<h1><span>15</span> vrijdag</h1>
 				<h2>Ekskurzyi</h2>
 			</div>
 
@@ -113,6 +125,281 @@
 				<h1><span>23</span> zaterdag</h1>
 				<h2>D&eacuteD&eacute Bryunsz</h2>
 			</div>
+
+			<a href='#'><button id='close-story'><span>&#8617;</span> terug</button></a>
+
+			<!-- Story elements -->
+			<div id='programma' class='story'>
+				<h2 class='story-header'>Programma</h2>
+				<div class='story-body'>
+					<div class='prog-dag'>
+						<h1>Dinsdag <span>12</span> februari</h1>
+						<p><span>18:00</span> Royaal Diner</p>
+						<p><span>20:00</span> Laudate et Orate</p>
+						<p><span>22:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1510/#pasfotos'>Rokkostyum Paszen</a></p>
+						<p><span>22:00</span> Borrel i <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1507#pasfotos'>Debatov</a></p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Woensdag <span>13</span> februari</h1>
+						<p><span>20:00</span> Recepski</p>
+						<p><span>23:00</span> Borrel i Debatov</p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Donderdag <span>14</span> februari</h1>
+						<p><span>18:00</span> Van Speijk Maalziyt</p>
+						<p><span>20:00</span> Letszing</p>
+						<p><span>22:00</span> Borrel i Debatov</p>
+						<p><span>22:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Ketzers/1514/#pasfotos'>Tsar Wars</a></p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Vrijdag <span>15</span> februari</h1>
+						<p><span>15:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1512/#pasfotos'>Ekskurzyi</a></p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Zaterdag <span>16</span> februari</h1>
+						<p><span>14:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1511/'>Bruzjesdag</a></p>
+						<p><span>18:00</span> Maalziyt</p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Zondag <span>17</span> februari</h1>
+						<p><span>10:00</span> Plan Skerkvi + koffey i thi</p>
+						<p><span>14:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1516/#pasfotos'>Geszelschap Speylen Geszelschap</a></p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Maandag <span>18</span> februari</h1>
+						<p><span>18:00</span> Pre-HV Maalziyt</p>
+						<p><span>20:00</span> Huishoudlyk Vergadring</p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Dinsdag <span>19</span> februari</h1>
+						<p><span>20:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1513/#pasfotos'>Kabarad</a></p>
+						<p><span>22:00</span> Dorrel i Debatov</p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Woensdag <span>20</span> februari</h1>
+						<p><span>20:00</span> Tyurbokring</p>
+						<p><span>22:00</span> Borrel i Debatov</p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Donderdag <span>21</span> februari</h1>
+						<p><span>17:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1524/#pasfotos'>RoyalThi</a></p>
+						<p><span>18:00</span> Maalziyt</p>
+						<p><span>20:00</span> Stryd z Vertikalny </p>
+						<p><span>22:00</span> Borrel i Debatov</p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Vrijdag <span>22</span> februari</h1>
+						<p><span>17:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1509'>Gala</a></p>
+					</div>
+
+					<div class='prog-dag'>
+						<h1>Zaterdag <span>23</span> februari</h1>
+						<p><span>12:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1508/#pasfotos'>D&eacute;D&eacute; Bryunsz</a></p>
+					</div>
+
+					<div class='dansles'>
+						Ook worden er danslessen gegeven: <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Ketzers/1503/#pasfotos'>Dants Repetityi</a>
+					</div>
+				</div>
+			</div>
+
+			<div id='etiquette' class='story'>
+				<h2 class='story-header'>Etiquette</h2>
+				<div class='story-body'>
+					<p>
+						<span class='initial'>T</span>ijdens een geweldige feestweek wilt u zich natuurlijk passend gedragen. 
+						Vooral op het gala wilt u zich van uw meest galante kant laten zien. 
+						Om u hierbij te helpen, hebben wij voor u de etiquette op papier gezet.
+					</p>
+					 
+					<h1>De dies</h1>
+					<p>
+						<span class='initial'>D</span>e dies is het hoogtepunt van het verenigingsleven. 
+						Voor deze gelegenheid is het passend om goed gekleed naar Confide te komen. 
+						Jas en das wordt gewaardeerd. 
+						Uiteraard zonder dissonanten zoals gymschoenen of witte sokken.
+						Het is verder de gewoonte om tijdens de dies je penning te dragen op Confide. 
+						Eerstejaars zullen deze ontvangen op de dies H.V. als ze geïnstalleerd worden. 
+						Op het gala hoeft u uw penning niet te dragen.
+					</p>
+					 
+					<h1>Voorbereidingen voor het gala</h1>
+
+					<h2>Uitnodigen</h2>
+					<p>
+						<span class='initial'>D</span>e heer vraagt de dame in een brief, handgeschreven met zilveren pen op blauw papier, of zij hem wil vergezellen naar het gala. 
+						De dame antwoordt hierop met een brief, handgeschreven met gouden pen op roze papier, waarin zij de heer uitnodigt om bij haar thuis een kopje thee te komen drinken. 
+						Tijdens deze visite wordt er niet over het gala gesproken. 
+						Als de dame het verzoek afwijst, serveert zij niets bij de thee. 
+						Gaat ze mee naar het gala, dan serveert ze koekjes, en is ze geïnteresseerd in meer dan alleen het gala, dan serveert ze zelfgebakken taart. 
+						Slagroom op de taart is de klap op de vuurpijl.
+					</p>
+					 
+					<p>
+						<span class='initial'>A</span>ls de dame besluit mee te gaan, moet ze tijdens de visite op de een of andere 
+						tersluikse manier de kleur van haar jurk duidelijk maken, zodat de heer de kleur van de corsages hierop aan kan passen. 
+						Bijvoorbeeld door een tipje van de jurk uit de kast te laten hangen, of bloemen van een bepaalde kleur te verzorgen. 
+						In schrikkeljaren is dit omgekeerd; de dame heeft dan de edele plicht, de heer aan haar zijde te vragen.
+					</p>
+					 
+					<h2>Corsages</h2>
+					 
+					<p>
+						<span class='initial'>D</span>e uitnodigende partij regelt de corsages. 
+						Traditioneel is de corsage een klein bloemetje, maar de corsage kan ook ludiek zijn. 
+						De heer draagt de traditionele corsage op de linker revers met de bloem omhoog. 
+						De dame draagt de corsage links onder het sleutelbeen met de bloem naar beneden.
+					</p>
+					 
+					<h1>Aanvang van het gala</h1>
+					 
+					<h2>Kleding</h2>
+					 
+					<p>
+						<span class='initial'>E</span>n dan is het zover: het is de grote dag van het gala. 
+						Na het laatste practicum op de vrijdagmiddag te hebben afgerond, haalt de heer de dame thuis op. 
+						Als hem open wordt gedaan, wordt de heer bijna verblind door de schoonheid van de dame, waar hij haar dan ook terecht mee complimenteert. 
+						Ze draagt een lange, gedecolleteerde avondjapon, die zo goed als mouwloos is. 
+						De prachtige, lange handschoenen tot over haar ellebogen en haar opgestoken haar maken het plaatje helemaal af. 
+						Maar ook de heer mag er zijn. 
+						Hij is gekleed in rokkostuum en heeft glimmende lakschoenen aan. 
+						Hij had ook nog een smoking in de kast hangen, maar dat vond hij, terecht, inferieur aan een rokkostuum.
+					</p>
+					 
+					<p>
+						<span class='initial'>T</span>ijdens het gala is het niet gepast om een horloge te dragen, immers: gezelligheid kent geen tijd. 
+						Enige uitzondering zijn zakhorloges voor de heren en sierlijke horloges die als ornament gedragen worden voor de dames. 
+						De heer heeft op het gala twee zakdoeken bij zich: één om eventueel zichzelf het zweet van het voorhoofd te deppen en één voor zijn date, die immers zelf geen zakken heeft. 
+						Verder heeft de heer weinig bij zich buiten huissleutels, corsages en geld voor de taxi. 
+						Een mobiele telefoon is toegestaan, mits deze op de "stille" stand staat. 
+						Voor een dame is, indien nodig, een klein handtasje toegestaan.
+					</p>
+					 
+					<h2>Aankomst</h2>
+					 
+					<p>
+						<span class='initial'>N</span>a een kopje thee wandelen ze samen naar Confide. 
+						De heer loopt links van de dame en zorgt er voor dat hij niet te hard loopt. 
+						Bij aankomst op Confide houdt de heer de deur open voor de dame en laat haar voorgaan naar binnen. 
+						Aldaar tovert de heer twee corsages uit de binnenzak van zijn jasje. 
+						Een daarvan speldt hij bij zijn dame op, en een bij zichzelf. 
+						Na het begroeten van vrienden en het kennismaken met onbekenden, is het tijd geworden om naar de afgehuurde bussen te gaan, 
+						die de galagangers naar de - nog steeds onbekende - locatie zullen brengen.
+					</p>
+					 
+					<h1>Op locatie</h1>
+					 
+					<h2>Binnenkomst</h2>
+					 
+					<p>
+						<span class='initial'>N</span>a een korte rit komen ze op de plaats van bestemming. 
+						Het overtreft alle verwachtingen. 
+						Opnieuw houdt de heer de deur open voor de dame en laat haar voorgaan. 
+						Indien er een trap aanwezig is in het restaurant, betreedt de heer deze als eerste, hij mag immers niet de gelegenheid krijgen om onder de jurk van de dame te kijken.
+						Bij een trap afdalen gaat de dame dus voor.
+						De heer helpt zijn dame uit haar jas en geeft deze af bij de garderobe, daarna gaat hij haar voor naar de eetzaal. 
+						Ze gaan zitten op de plaats die aan hen is toegewezen, de heer neemt plaats aan de linkerzijde van de dame. 
+						De heer neemt pas plaats aan tafel als hij de stoel voor de dame heeft aangeschoven.
+					</p>
+					 
+					<h2>Tijdens het diner</h2>
+					 
+					<p>
+						<span class='initial'>A</span>ls iedereen zit, wordt de maaltijd geopend door de DiesCie praeses. 
+						Nadat de maaltijd geopend is, wordt het eten binnengebracht. 
+						Als zowel de dame als de heer en hun beide buren voorzien zijn, beginnen ze met eten. 
+						Uiteraard hebben ze hierbij de ellebogen niet op tafel. 
+						Ze beginnen met het bestek aan de buitenkant. 
+						Gedurende de maaltijd werken ze naar binnen. 
+						Voordat de heer een slokje van zijn wijn neemt, veegt hij eerst zijn mond af om vetafdrukken op zijn glas te voorkomen.
+						Tijdens het eten wordt er heel wat afgepraat. 
+						Om de smaak van het eten niet te bederven, blijven de sigaren nog in de doos.
+					</p>
+					 
+					<p>
+						<span class='initial'>I</span>n het geval dat een van de partners zich wil verwijderen, wordt toestemming gevraagd aan de partner. 
+						Als de dame dit vraagt, staat ze gelijk op, net als de heer en die kan pas gaan zitten als zij zich heeft verwijderd.
+						Bij terugkeer van de dame schuift de heer haar stoel aan.
+						Het is niet correct om de partner lang alleen te laten.
+					</p>
+					 
+					<h1>Het feest</h1>
+					 
+					<h2>Dansen</h2>
+					 
+					<p>
+						<span class='initial'>N</span>a het eten en het debatteren, gaat de band spelen. 
+						Het is tijd om te gaan dansen. 
+						Een heer vraagt een dame ten dans door een lichte buiging te maken en te vragen: “Mag ik deze dans van u?”. 
+						De dame antwoordt bevestigend door een knik. 
+						De heer biedt de dame zijn rechterarm en begeleidt haar richting dansvloer. 
+						Kan de heer de dame zijn arm niet aanbieden door de drukte, dan loopt de dame voorop.
+						Tijdens de dans bent u uitsluitend gericht op uw partner van dat moment en voert u geen gesprek met een ander paar. 
+						Na afloop van de dans begeleidt de heer de dame weer terug naar haar plaats.
+					</p>
+					 
+					<p>
+						<span class='initial'>U</span>iteraard vraagt de heer als eerste zijn eigen dame ten dans, voordat hij een ander vraagt. 
+						In principe wordt een dansverzoek niet zonder goede reden door de dame geweigerd. 
+						Als een dame heeft geweigerd, is het niet correct om direct een dame 
+						die in de buurt van de eerste dame stond ter dans te vragen, zij kan hierdoor het gevoel krijgen dat ze tweede keus is.
+						Als een dame geweigerd heeft, is het ook niet de bedoeling dat zij meteen met een ander gaat dansen. 
+						Nadat u een dame terug heeft gebracht naar haar plaats, vraagt u niet direct een andere dame om een dans.
+					</p>
+					 
+					<h2>Palen</h2>
+					 
+					<p>
+						<span class='initial'>D</span>e dame wordt door een andere heer ten dans gevraagd en de heer heeft nu niet meer zo'n behoefte aan dansen. 
+						Hij steekt een sigaar op, niet met een aansteker maar met een cederhoutje. 
+						Hij rookt de sigaar rustig en gelijkmatig op. 
+						Als de sigaar op is, drukt hij deze niet uit, maar legt hij de sigaar in de asbak om uit te doven. 
+						De heer en de dame dansen nog veel, hebben goede gesprekken en maken een aantal nieuwe vrienden.
+					</p>
+					 
+					<p>
+						<span class='initial'>A</span>lles dat een begin heeft, heeft ook een eind. 
+						Bij de garderobe haalt de heer de jas van de dame en helpt haar bij het aantrekken. 
+						Bij het weggaan gaat de dame de heer voor, maar bij de deur wacht zij tot de heer hem voor haar opent. 
+						De heer brengt de dame netjes naar huis. 
+						Wanneer de dame dit verlangt kan zij de heer uitnodigen voor een slaapmutsje, wanneer de dame dit niet doet dient de heer de keuze van de dame te respecteren.
+					</p>
+					 
+					<p>
+						<span class='initial'>H</span>et is voor het vertrekken voor de heer geoorloofd de rits van de jurk van de dame maximaal 20 centimeter open te ritsen. 
+						Dit zodat de dame niet achterblijft in een jurk waar zij niet uit kan. 
+						Tot slot neemt de heer met een tedere kus afscheid en gaat zijns weegs, mijmerend over de bijzondere avond die voorbij is.
+					</p>
+				</div>
+			</div>
+
+			<div id='selectie' class='story'>
+				<h2 class='story-header'>Sc&egrave;ne Selectie</h2>
+				<div class='story-body'>
+				</div>
+			</div>
+
+			<div id='commissie' class='story'>
+				<h2 class='story-header'>Commissie</h2>
+				<div class='story-body'>
+				</div>
+			</div>
+
+			<div id='contact' class='story'>
+				<h2 class='story-header'>Contact</h2>
+				<div class='story-body'>
+				</div>
+			</div>
 		</div>
 
 		<!--
@@ -131,6 +418,8 @@
 			<h1 id='scene-23'><span>23</span>zaterdag</h1>
 		</div>
 		-->
+
+		<!-- Navigation under window -->
 		<div id='menu'>
 			<a href='#programma'>programma</a> |
 			<a href='#etiquette'>etiquette</a> |

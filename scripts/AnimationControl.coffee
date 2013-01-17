@@ -9,7 +9,7 @@ define [
 ], ( Timer, Timers ) ->
 	
 	BG_SEL = "div#background"
-	FG_SEL = "div#foreground"
+	FG_SEL = "svg#foreground"
 	BLACK_SEL = "div#black"
 
 	FADEOUT_DUR = 500
@@ -93,22 +93,19 @@ define [
 
 			jQuery( "button#play" ).on "click", =>
 				@continue()
-				@_ctrl_pause()
 
 			jQuery( "button#pause" ).on "click", =>
 				@stop()
-				@_ctrl_play()
 
 			jQuery( "button#replay" ).on "click", =>
 				@reboot()
-				@_ctrl_pause()
 			
 		select: ( scene ) ->
-			scene = "_#{scene}";
-			if typeof @[ scene ] is "function"
+			if typeof @[ "_#{scene}" ] is "function"
+				@_current_scene = scene
 				@_fadeout_in( BLACK_DUR, => 
 					@_reset_text()
-					@[ scene ]() 
+					@[ "_#{scene}" ]() 
 				)
 				@_ctrl_pause()
 			else
@@ -123,28 +120,13 @@ define [
 		current_scene: ->
 			return @_current_scene
 
-		_ctrl_play: ->
-			jQuery( "div#controls button" ).hide()
-			jQuery( "button#play" ).show()
-		
-		_ctrl_pause: ->
-			jQuery( "div#controls button" ).hide()
-			jQuery( "button#pause" ).show()
-
-		_ctrl_replay: ->
-			jQuery( "div#controls button" ).hide()
-			jQuery( "button#replay" ).show()
-
-		_reset_text: ->
-			jQuery( "div.slide-title" ).fadeTo( 0, 0 )
-				.children().removeAttr( "style" )
-
 		stop: ->
-			@_timers.stop()
+			if @_timers? then @_timers.stop()
 			jQuery( "div.slide-title > *" ).stop()
-			@_fade_timer.stop()
+			if @_fade_timer? then @_fade_timer.stop()
 			jQuery( "div#black" ).stop()
 			jQuery.fn.scrollPath( "stop" )
+			@_ctrl_play()
 
 		pause: ->
 			@_timers.pause()
@@ -155,6 +137,23 @@ define [
 			@_timers.resume()
 			jQuery( "div.slide-title > *" ).resume()
 			jQuery.fn.scrollPath( "resume" )
+
+		_ctrl_play: ->
+			jQuery( "div#controls button" ).hide()
+			jQuery( "button#play" ).show()
+		
+		_ctrl_pause: ->
+			jQuery( "div#controls button" ).hide()
+			jQuery( "button#pause" ).show()
+			jQuery( "button#play span" ).hide()
+
+		_ctrl_replay: ->
+			jQuery( "div#controls button" ).hide()
+			jQuery( "button#replay" ).show()
+
+		_reset_text: ->
+			jQuery( "div.slide-title" ).fadeTo( 0, 0 )
+				.children().removeAttr( "style" )
 
 		_start: ->
 			@_current_scene = "start"
@@ -594,16 +593,16 @@ define [
 			, options.duration )
 
 		_scrollto: ( target, duration, callback ) ->
-			jQuery.fn.scrollPath( "scrollTo", target, duration*SPEED, callback )
+			jQuery.fn.scrollPath( "scrollTo", target, duration/SPEED, callback )
 
 		_timeout: ( cb, delay ) ->
 			@_timers.add( cb, delay )
 
 		_fadeout: ( cb = -> ) ->
-			jQuery( BLACK_SEL ).stop().fadeTo( 500, 1, cb )
+			jQuery( BLACK_SEL ).stop().fadeIn( 500, cb )
 		
 		_fadein: ( cb = -> ) ->
-			jQuery( BLACK_SEL ).stop().fadeTo( 550, 0, cb )
+			jQuery( BLACK_SEL ).stop().fadeOut( 550, cb )
 
 		_fadeout_in: ( delay = 250, cb1, cb2 ) ->
 			if @_fade_timer?
@@ -691,7 +690,7 @@ define [
 			P17 = { x:P16.x, y:950 }
 
 			jQuery.fn.scrollPath("getPath", 
-				scrollSpeed: 50
+				scrollSpeed: 40
 			)
 				# intro
 				.moveTo( P0.x, P0.y, { name: "start" })
