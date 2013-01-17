@@ -764,4 +764,5 @@ define [
 				
 			jQuery( "div#background" ).scrollPath(
 				scroll: false
+				container: jQuery( "div#window" )
 			)

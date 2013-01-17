@@ -3,4 +3,4 @@
 	url = https://github.com/cowboy/jquery-hashchange.git
 [submodule "vendor/jQueryScrollPath"]
 	path = vendor/jQueryScrollPath
-	url = https://github.com/JoelBesada/scrollpath.git
+	url = https://github.com/inkworks/scrollpath.git
