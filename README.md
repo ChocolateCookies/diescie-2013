@@ -10,7 +10,7 @@ Submodules
 ----------
 Deze repo maakt gebruik van `git submodules`. 
 Deze kunnen geinitialiseerd worden door de commando's `git submodule init` en vervolgens `git submodule update` aan te roepen. 
-Raadpleeg de [http://git-scm.com/book/en/Git-Tools-Submodules](git handleiding) voor meer info.
+Raadpleeg de [git handleiding](http://git-scm.com/book/en/Git-Tools-Submodules) voor meer info.
 
 Gebruikte tools
 ---------------
@@ -22,7 +22,7 @@ Een syntax alternatief voor JavaScript. De code is python-achtig en compilet naa
 __Noot: command-line tool installeren met ruby gem (zie meer info)__
 
 Versie: 1.4.0
-[Meer info](www.coffeescript.org)
+[Meer info](http://www.coffeescript.org)
 
 ### SASS (Syntactically Awesome StyleSheets)
 Een syntax alternatief voor CSS. 
@@ -35,7 +35,7 @@ __Noot: Om het project te builden is de command-line tool nodig, te installeren 
 
 Versie: 3.2.5
 
-[Meer info](www.sass-lang.com)
+[Meer info](http://www.sass-lang.com)
 
 ### RequireJS
 Een JavaScript fileloader en module manager. Regelt closure en imports door middel van de functies `include` en `require`.
@@ -48,7 +48,7 @@ Locatie: vendor/require.js
 
 Versie: 2.1.2
 
-[Meer info](www.requirejs.org)
+[Meer info](http://www.requirejs.org)
 
 ### jQuery
 Een JavaScript library voor triviale en geavanceerde functies, waaronder event handling en DOM manipulatie.
@@ -106,7 +106,7 @@ Omdat RequireJS geimporteert moet worden, is de volgende tag in de head van inde
 	<script src='vendor/require.js' data-main='scripts/main'></script>
 
 Deze neemt RequireJS op en met de data-main property wordt `scripts/main.js` aangeroepen als main functie.
-In `scripts/main.coffee` wordt RequireJS geconfigureerd (zie de [online RequireJS docs](www.requirejs.org/docs/optimization.html#basics) voor meer info)
+In `scripts/main.coffee` wordt RequireJS geconfigureerd (zie de [online RequireJS docs](http://www.requirejs.org/docs/optimization.html#basics) voor meer info)
 
 Daarna wordt de werkelijke main functie geimporteerd door de volgende script:
 
