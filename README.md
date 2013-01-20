@@ -1,6 +1,6 @@
 Webstek - DiesCie Ipema 2012-2013 ( Russisch Royaal )
 =====================================================
-De source voor de webstek ter ere van de 51e Dies Natalis van Christelijke studentenvereniging Civitas Studiosorum Reformatorum.
+De broncode voor de webstek ter ere van de 51e Dies Natalis van Christelijke studentenvereniging Civitas Studiosorum Reformatorum.
 
 Auteur: Adriaan Groenenboom (http://inkworks.nl)
 
@@ -17,7 +17,7 @@ Raadpleeg de [git handleiding](http://git-scm.com/book/en/Git-Tools-Submodules) 
 Gebruikte tools
 ---------------
 ### CoffeeScript
-Een syntax alternatief voor JavaScript. De code is python-achtig en compilet naar JavaScript met behulp van het `coffee` commando:
+Een effectief syntax alternatief voor JavaScript. De code is python-achtig en compilet naar JavaScript met behulp van het `coffee` commando:
 
 	coffee --compile --watch .
 
@@ -28,9 +28,9 @@ Versie: 1.4.0
 [Meer info](http://www.coffeescript.org)
 
 ### SASS (Syntactically Awesome StyleSheets)
-Een syntax alternatief voor CSS. 
-Deze geeft de mogelijkheid om variabelen en ingebouwde- en eigen functies (mixins) te gebruiken. 
-Compilet naar CSS met het `sass` commando:
+Een krachtig syntax alternatief voor CSS. 
+Deze library geeft onder andere de mogelijkheid om variabelen en ingebouwde- en eigen functies (mixins) te gebruiken. 
+SASS compilet naar CSS met het `sass` commando:
 
 	sass --watch .:.
 
@@ -41,7 +41,7 @@ Versie: 3.2.5
 [Meer info](http://www.sass-lang.com)
 
 ### RequireJS
-Een JavaScript fileloader en module manager. Regelt closure en imports door middel van de functies `define` en `require`.
+Een JavaScript fileloader en module manager. RequireJS biedt closure en module imports door middel van de functies `define` en `require`.
 
 __Noot: Om het project te builden is een command-line tool nodig, te installeren met het volgende commando:__
 
@@ -54,7 +54,7 @@ Versie: 2.1.2
 [Meer info](http://www.requirejs.org)
 
 ### jQuery
-Een JavaScript library voor triviale en geavanceerde functies, waaronder event handling en DOM manipulatie.
+Een JavaScript library die triviale en geavanceerde functies levert, waaronder event handling en DOM manipulatie.
 
 Locatie: vendor/jquery-1.9.0.js
 
@@ -65,7 +65,7 @@ Versie: 1.9.0
 Gebruikte jQuery plugins
 -----------------
 ### jQueryHashChange
-Implementeert een eenvoudige bookmarkable geschiedenis en event handling op basis van window.location.hash, te zien als een string achter het hash (#) teken in de adresbalk.
+Implementeert een eenvoudige bookmarkable geschiedenis en event handling op basis van window.location.hash, ook wel bekend als de string achter het hash (#) teken in de adresbalk.
 
 Locatie: vendor/jQueryHashChange/
 
@@ -85,7 +85,7 @@ Versie: 1.1.1 (forked & editted, zie commit messages)
 [Meer info (origineel)](https://github.com/JoelBesada/scrollpath)
 
 ### jQueryWaitForImages
-Een jQuery plugin die het laden van afbeeldingen regelt. Een event wordt getriggert zodra alle <img> en CSS sources geladen zijn.
+Een jQuery plugin die het laden van afbeeldingen regelt. Een event wordt getriggert zodra alle `<img>` en CSS afbeeldingen geladen zijn.
 
 Locatie: vendor/jQueryWaitForImages/
 
@@ -95,7 +95,7 @@ Versie: 1.4.2
 
 Builden
 -------
-De RequireJS library importeert de JS files als modules. De development werkt met andere files dan de production versie. 
+De RequireJS library importeert de JS files als modules. De development versie werkt met andere files dan de production versie. 
 
 __Noot: om het wisselen tussen development en production makkelijk te maken, zijn de tags al in index.html opgenomen.
 Het enige wat u hoeft te doen, is de comment tags (<!-- -->) weg te halen, zodat de juiste modus geactiveerd wordt.__
