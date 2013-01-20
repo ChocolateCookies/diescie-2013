@@ -1,5 +1,5 @@
 
-define [ "cs!Timer" ], ( Timer ) ->
+define [ "Timer" ], ( Timer ) ->
 	class Timers
 		constructor: ->
 			@_timers = []

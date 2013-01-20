@@ -25,4 +25,3 @@ define ->
 
 		stop: ->
 			@pause()
-			delete @

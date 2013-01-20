@@ -2,47 +2,36 @@
 <html lang="nl">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-		<title>Russisch Royaal - Dies Natalis 2013</title>
-		<script src='vendor/InkNode/lib/require.js'></script>
 
-		<script>
-			require({
-				baseUrl : "scripts",
-				paths : {
-					"jQuery/jQuery" : "http://code.jquery.com/jquery-1.8.3.min",
-					"jQuery/ScrollPath" : "vendor/jQueryScrollPath/script/jquery.scrollpath",
-					"jQuery/Easing" : "vendor/jQueryEasing/jquery.easing.1.3",
-					"jQuery/Pause" : "vendor/jQueryPause/jquery.pause.min",
-					"jQuery/HashChange" : "vendor/jQueryHashChange/jquery.ba-hashchange.min",
-					lib : "vendor/InkNode/lib",
-					cs : "vendor/InkNode/lib/cs",
-					"coffee-script" : "vendor/InkNode/lib/coffee-script"
-				},
-				shim : {
-					"jQuery/ScrollPath": {
-						deps: [ "jQuery/jQuery" ],
-						exports: "jQuery.fn.scrollPath"
-					},
-					"jQuery/Pause": {
-						deps: [ "jQuery/jQuery" ],
-						exports: "jQuery.fn.pause"
-					},
-					"jQuery/Easing": {
-						deps: [ "jQuery/jQuery" ]
-					},
-					"jQuery/HashChange": {
-						deps: [ "jQuery/jQuery" ]
-					}
-				}
-			}, [ "cs!main_index" ]);
-		</script>
+		<title>Russisch Royaal - Dies Natalis 2013</title>
+
+		<!-- DEVELOPMENT -->
+		<!--
+		<script src='vendor/require.js' data-main='scripts/main'></script>
+		<script> require([ "main_index" ], function() {});</script>
+		-->
+
+		<!-- PRODUCTION -->
+		<script src='vendor/require.js'></script>
+		<script src='scripts/main_index-built.js'></script>
 
 		<link rel='stylesheet' href='styles/main.css' />
-		<link rel='stylesheet' href='vendor/jQueryScrollPath/style/scrollpath.css' />
+
+		<link rel='shortcut icon' href='images/favicon.png' type='image/png' />
 	</head>
 
 	<body>
+		<audio id='music' oncanplay='musicIsReady = true;'>
+			<source src='audio/valse-des-fleurs.mp3' type='audio/mpeg' />
+			<source src='audio/valse-des-fleurs.ogg' type='audio/ogg' />
+		</audio>
+		<audio id='trolmusic' loop >
+			<source src='audio/trololo.mp3' type='audio/mpeg' />
+			<source src='audio/trololo.ogg' type='audio/ogg' />
+		</audio>
+
 		<img id='logo' src='images/logo-silver-300.png' alt='Russisch Royaal' width='300' height='52' />
+		<img id='subtitle' src='images/subtitle-gold-200.png' alt='Wat nou crisis?!' width='200' height='17' />
 
 		<!-- Window element where the magic happens -->
 		<div id='window'>
@@ -51,171 +40,179 @@
 
 			<div id='black'></div>
 
-			<svg id='foreground' xmlns="http://www.w3.org/2000/svg" version="1.1"></svg>
+			<h1 id='loading'>een moment geduld...</h1>
+
+			<img src='images/foreground.png' class='hidden' />
+			<svg id='foreground' pointer-events='none' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+				<image xlink:href='images/foreground.png' width='952' height='492' />
+			</svg>
 
 			<!-- Animation control interface -->
 			<div id='controls'>
-				<button id='play'><span>klik om verder te gaan</span>&#9654;</button>
-				<button id='pause'>&#449;</button>
-				<button id='replay'>&#8634;</button>
+				<button id='play' class='control'><span>klik om verder te gaan</span>&#9654;</button>
+				<button id='pause' class='control'>&#449;</button>
+				<button id='replay' class='control'>&#8634;</button>
 			</div>
+
+			<!-- Sound control -->
+			<button id='toggle-sound' class='control'></button>
 
 			<!-- Titles for scenes -->
 			<div id='leo' class='slide-title'>
-				<h1><span>12</span> dinsdag</h1>
-				<h2>Laudate et Orate</h2>
+				<h2><span>12</span> dinsdag</h2>
+				<h1>Laudate et Orate</h1>
 			</div>
 
-			<div id='receptie' class='slide-title'>
-				<h1><span>13</span> woensdag</h1>
-				<h2>Recepski</h2>
+			<div id='recepski' class='slide-title'>
+				<h2><span>13</span> woensdag</h2>
+				<h1>Recepski</h1>
 			</div>
 
-			<div id='lezing' class='slide-title'>
-				<h1><span>14</span> donderdag</h1>
-				<h2>Letszing</h2>
+			<div id='letszing' class='slide-title'>
+				<h2><span>14</span> donderdag</h2>
+				<h1>Letszing</h1>
 			</div>
 
 			<div id='tsarwars' class='slide-title'>
-				<h1><span>14</span> donderdagnacht</h1>
-				<h2>Tsar Wars</h2>
+				<h2><span>14</span> donderdagnacht</h2>
+				<h1>Tsar Wars</h1>
 			</div>
 
-			<div id='excursie' class='slide-title'>
-				<h1><span>15</span> vrijdag</h1>
-				<h2>Ekskurzyi</h2>
+			<div id='ekskurzyi' class='slide-title'>
+				<h2><span>15</span> vrijdag</h2>
+				<h1>Ekskurzyi</h1>
 			</div>
 
-			<div id='brusjesdag' class='slide-title left'>
-				<h1><span>16</span> zaterdag</h1>
-				<h2>Bruzjesdag</h2>
+			<div id='bruzjesdag' class='slide-title left'>
+				<h2><span>16</span> zaterdag</h2>
+				<h1>Bruzjesdag</h1>
 			</div>
 
-			<div id='spellen' class='slide-title'>
-				<h1><span>17</span> zondag</h1>
-				<h2>Geszelschap<br />Speylen<br />Geszelschap</h2>
+			<div id='gsg' class='slide-title'>
+				<h2><span>17</span> zondag</h2>
+				<h1>Geszelschap<br />Speylen<br />Geszelschap</h1>
 			</div>
 
 			<div id='hv' class='slide-title left'>
-				<h1><span>18</span> maandag</h1>
-				<h2>Huishoudlyk<br />Vergadring</h2>
+				<h2><span>18</span> maandag</h2>
+				<h1>Huishoudlyk<br />Vergadring</h1>
 			</div>
 
-			<div id='cabaret' class='slide-title left'>
-				<h1><span>19</span> dinsdag</h1>
-				<h2>Kabarad</h2>
+			<div id='kabarad' class='slide-title left'>
+				<h2><span>19</span> dinsdag</h2>
+				<h1>Kabarad</h1>
 			</div>
 
-			<div id='turbokring' class='slide-title left'>
-				<h1><span>20</span> woensdag</h1>
-				<h2>Tyurbokring</h2>
+			<div id='tyurbokring' class='slide-title left'>
+				<h2><span>20</span> woensdag</h2>
+				<h1>Tyurbokring</h1>
 			</div>
 
-			<div id='verticalenstrijd' class='slide-title left'>
-				<h1><span>21</span> donderdag</h1>
-				<h2>Stryd z Vertikalny</h2>
+			<div id='stryd' class='slide-title left'>
+				<h2><span>21</span> donderdag</h2>
+				<h1>Stryd z Vertikalny</h1>
 			</div>
 
 			<div id='gala' class='slide-title left'>
-				<h1><span>22</span> vrijdag</h1>
-				<h2>Gala</h2>
+				<h2><span>22</span> vrijdag</h2>
+				<h1>Gala</h1>
 			</div>
 
-			<div id='dedebrunch' class='slide-title'>
-				<h1><span>23</span> zaterdag</h1>
-				<h2>D&eacuteD&eacute Bryunsz</h2>
+			<div id='dedebryunsz' class='slide-title'>
+				<h2><span>23</span> zaterdag</h2>
+				<h1>D&eacuteD&eacute Bryunsz</h1>
 			</div>
 
 			<a href='#'><button id='close-story'><span>&#8617;</span> terug</button></a>
 
 			<!-- Story elements -->
 			<div id='programma' class='story'>
-				<h2 class='story-header'>Programma</h2>
 				<div class='story-body'>
-					<div class='prog-dag'>
-						<h1>Dinsdag <span>12</span> februari</h1>
+					<h1 class='story-header'>Programma</h1>
+					<div class='schedule'>
+						<h2>Dinsdag <span>12</span> februari</h2>
 						<p><span>18:00</span> Royaal Diner</p>
 						<p><span>20:00</span> Laudate et Orate</p>
 						<p><span>22:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1510/#pasfotos'>Rokkostyum Paszen</a></p>
 						<p><span>22:00</span> Borrel i <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1507#pasfotos'>Debatov</a></p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Woensdag <span>13</span> februari</h1>
+					<div class='schedule'>
+						<h2>Woensdag <span>13</span> februari</h2>
 						<p><span>20:00</span> Recepski</p>
 						<p><span>23:00</span> Borrel i Debatov</p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Donderdag <span>14</span> februari</h1>
+					<div class='schedule'>
+						<h2>Donderdag <span>14</span> februari</h2>
 						<p><span>18:00</span> Van Speijk Maalziyt</p>
 						<p><span>20:00</span> Letszing</p>
 						<p><span>22:00</span> Borrel i Debatov</p>
 						<p><span>22:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Ketzers/1514/#pasfotos'>Tsar Wars</a></p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Vrijdag <span>15</span> februari</h1>
+					<div class='schedule'>
+						<h2>Vrijdag <span>15</span> februari</h2>
 						<p><span>15:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1512/#pasfotos'>Ekskurzyi</a></p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Zaterdag <span>16</span> februari</h1>
+					<div class='schedule'>
+						<h2>Zaterdag <span>16</span> februari</h2>
 						<p><span>14:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1511/'>Bruzjesdag</a></p>
 						<p><span>18:00</span> Maalziyt</p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Zondag <span>17</span> februari</h1>
+					<div class='schedule'>
+						<h2>Zondag <span>17</span> februari</h2>
 						<p><span>10:00</span> Plan Skerkvi + koffey i thi</p>
 						<p><span>14:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1516/#pasfotos'>Geszelschap Speylen Geszelschap</a></p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Maandag <span>18</span> februari</h1>
+					<div class='schedule'>
+						<h2>Maandag <span>18</span> februari</h2>
 						<p><span>18:00</span> Pre-HV Maalziyt</p>
 						<p><span>20:00</span> Huishoudlyk Vergadring</p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Dinsdag <span>19</span> februari</h1>
+					<div class='schedule'>
+						<h2>Dinsdag <span>19</span> februari</h2>
 						<p><span>20:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1513/#pasfotos'>Kabarad</a></p>
 						<p><span>22:00</span> Dorrel i Debatov</p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Woensdag <span>20</span> februari</h1>
+					<div class='schedule'>
+						<h2>Woensdag <span>20</span> februari</h2>
 						<p><span>20:00</span> Tyurbokring</p>
 						<p><span>22:00</span> Borrel i Debatov</p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Donderdag <span>21</span> februari</h1>
+					<div class='schedule'>
+						<h2>Donderdag <span>21</span> februari</h2>
 						<p><span>17:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1524/#pasfotos'>RoyalThi</a></p>
 						<p><span>18:00</span> Maalziyt</p>
 						<p><span>20:00</span> Stryd z Vertikalny </p>
 						<p><span>22:00</span> Borrel i Debatov</p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Vrijdag <span>22</span> februari</h1>
+					<div class='schedule'>
+						<h2>Vrijdag <span>22</span> februari</h2>
 						<p><span>17:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1509'>Gala</a></p>
 					</div>
 
-					<div class='prog-dag'>
-						<h1>Zaterdag <span>23</span> februari</h1>
+					<div class='schedule'>
+						<h2>Zaterdag <span>23</span> februari</h2>
 						<p><span>12:00</span> <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Lustrum/1508/#pasfotos'>D&eacute;D&eacute; Bryunsz</a></p>
 					</div>
 
-					<div class='dansles'>
+					<div class='dancing'>
 						Ook worden er danslessen gegeven: <a target='_blank' href='http://csrdelft.nl/actueel/groepen/Ketzers/1503/#pasfotos'>Dants Repetityi</a>
 					</div>
 				</div>
 			</div>
 
 			<div id='etiquette' class='story'>
-				<h2 class='story-header'>Etiquette</h2>
 				<div class='story-body'>
+					<h1 class='story-header'>Etiquette</h1>
 					<p>
 						<span class='initial'>T</span>ijdens een geweldige feestweek wilt u zich natuurlijk passend gedragen. 
 						Vooral op het gala wilt u zich van uw meest galante kant laten zien. 
@@ -229,7 +226,7 @@
 						Jas en das wordt gewaardeerd. 
 						Uiteraard zonder dissonanten zoals gymschoenen of witte sokken.
 						Het is verder de gewoonte om tijdens de dies je penning te dragen op Confide. 
-						Eerstejaars zullen deze ontvangen op de dies H.V. als ze geïnstalleerd worden. 
+						Eerstejaars zullen deze ontvangen op de dies H.V. als ze ge&iuml;nstalleerd worden. 
 						Op het gala hoeft u uw penning niet te dragen.
 					</p>
 					 
@@ -241,7 +238,7 @@
 						De dame antwoordt hierop met een brief, handgeschreven met gouden pen op roze papier, waarin zij de heer uitnodigt om bij haar thuis een kopje thee te komen drinken. 
 						Tijdens deze visite wordt er niet over het gala gesproken. 
 						Als de dame het verzoek afwijst, serveert zij niets bij de thee. 
-						Gaat ze mee naar het gala, dan serveert ze koekjes, en is ze geïnteresseerd in meer dan alleen het gala, dan serveert ze zelfgebakken taart. 
+						Gaat ze mee naar het gala, dan serveert ze koekjes, en is ze ge&iuml;nteresseerd in meer dan alleen het gala, dan serveert ze zelfgebakken taart. 
 						Slagroom op de taart is de klap op de vuurpijl.
 					</p>
 					 
@@ -279,7 +276,7 @@
 					<p>
 						<span class='initial'>T</span>ijdens het gala is het niet gepast om een horloge te dragen, immers: gezelligheid kent geen tijd. 
 						Enige uitzondering zijn zakhorloges voor de heren en sierlijke horloges die als ornament gedragen worden voor de dames. 
-						De heer heeft op het gala twee zakdoeken bij zich: één om eventueel zichzelf het zweet van het voorhoofd te deppen en één voor zijn date, die immers zelf geen zakken heeft. 
+						De heer heeft op het gala twee zakdoeken bij zich: &eacute;&eacute;n om eventueel zichzelf het zweet van het voorhoofd te deppen en &eacute;&eacute;n voor zijn date, die immers zelf geen zakken heeft. 
 						Verder heeft de heer weinig bij zich buiten huissleutels, corsages en geld voor de taxi. 
 						Een mobiele telefoon is toegestaan, mits deze op de "stille" stand staat. 
 						Voor een dame is, indien nodig, een klein handtasje toegestaan.
@@ -340,7 +337,7 @@
 					<p>
 						<span class='initial'>N</span>a het eten en het debatteren, gaat de band spelen. 
 						Het is tijd om te gaan dansen. 
-						Een heer vraagt een dame ten dans door een lichte buiging te maken en te vragen: “Mag ik deze dans van u?”. 
+						Een heer vraagt een dame ten dans door een lichte buiging te maken en te vragen: &ldquo;Mag ik deze dans van u?&rdquo;. 
 						De dame antwoordt bevestigend door een knik. 
 						De heer biedt de dame zijn rechterarm en begeleidt haar richting dansvloer. 
 						Kan de heer de dame zijn arm niet aanbieden door de drukte, dan loopt de dame voorop.
@@ -376,7 +373,7 @@
 					</p>
 					 
 					<p>
-						<span class='initial'>H</span>et is voor het vertrekken voor de heer geoorloofd de rits van de jurk van de dame maximaal 20 centimeter open te ritsen. 
+						<span class='initial'>H</span>et is voor het vertrekken voor de heer geoorloofd de rits van de jurk van de dame maximaal twintig centimeter open te ritsen. 
 						Dit zodat de dame niet achterblijft in een jurk waar zij niet uit kan. 
 						Tot slot neemt de heer met een tedere kus afscheid en gaat zijns weegs, mijmerend over de bijzondere avond die voorbij is.
 					</p>
@@ -384,40 +381,149 @@
 			</div>
 
 			<div id='selectie' class='story'>
-				<h2 class='story-header'>Sc&egrave;ne Selectie</h2>
 				<div class='story-body'>
+					<h1 class='story-header'>Sc&egrave;ne Selectie</h1>
+
+					<p class='scene'>
+						<a href='#scn:intro'>
+							<img src='images/scenes/intro.png' width='100' height='100' alt='intro' />
+							Intro
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:leo'>
+							<img src='images/scenes/leo.png' width='100' height='100' alt='leo' />
+							Laudate et Orate
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:recepski'>
+							<img src='images/scenes/receptie.png' width='100' height='100' alt='recepski' />
+							Recepski
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:letszing'>
+							<img src='images/scenes/lezing.png' width='100' height='100' alt='letszing' />
+							Letszing
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:tsarwars'>
+							<img src='images/scenes/tsarwars.png' width='100' height='100' alt='tsarwars' />
+							Tsar Wars
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:ekskurzyi'>
+							<img src='images/scenes/excursie.png' width='100' height='100' alt='ekskurzyi' />
+							Ekskurzyi
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:bruzjesdag'>
+							<img src='images/scenes/brusjes.png' width='100' height='100' alt='bruzjesdag' />
+							Bruzjesdag
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:gsg'>
+							<img src='images/scenes/gsg.png' width='100' height='100' alt='gsg' />
+							Geszelschap Speylen Geszelschap
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:hv'>
+							<img src='images/scenes/hv.png' width='100' height='100' alt='hv' />
+							Huishoudlyk Vergadring
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:kabarad'>
+							<img src='images/scenes/opdeplanken.png' width='100' height='100' alt='kabarad' />
+							Kabarad
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:tyurbokring'>
+							<img src='images/scenes/turbokring.png' width='100' height='100' alt='tyurbokring' />
+							Tyurbokring
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:stryd'>
+							<img src='images/scenes/verticalestrijd.png' width='100' height='100' alt='stryd' />
+							Stryd z Vertikalny
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:gala'>
+							<img src='images/scenes/gala.png' width='100' height='100' alt='gala' />
+							Gala
+						</a>
+					</p>
+
+					<p class='scene'>
+						<a href='#scn:dedebryunsz'>
+							<img src='images/scenes/dedebrunch.png' width='100' height='100' alt='dedebryunsz' />
+							D&eacute;d&eacute; Bryunsz
+						</a>
+					</p>
 				</div>
 			</div>
 
 			<div id='commissie' class='story'>
-				<h2 class='story-header'>Commissie</h2>
 				<div class='story-body'>
+					<h1 class='story-header'>Commissie</h1>
+
+					<p>
+						DiesCie Russisch Royaal is de commissie die verantwoordelijk is voor 
+						alle activiteiten ter ere van het 51e lustrum van de Civitas Studiosorum Reformatorum. 
+						Dit jaar is het diesthema Russisch Royaal. 
+						Bij de verschillende activiteiten zult u wellicht een Russisch royaal tintje herkennen,
+						en bovendien de vraag &ldquo;Wat nou crisis?!&rdquo; beantwoorden met: &ldquo;Inderdaad!&rdquo;
+						Met u willen we er een feestelijke en memorabele diesweek van maken!
+					</p>
+ 
+					<p>DiesCie Russisch Royaal bestaat uit de volgende leden: (vlnr)</p>
+
+					<img src='images/commissie_1.png' width='400' height='402' alt='commissie' />
+
+					<ul id='diescie-ipema'>
+						<li>Rozemarijn de Vries</li>
+						<li class='bijnaam'>Kunstnhar</li>
+						<li>Karin Bremer</li>
+						<li class='bijnaam'>Zhena Reklamnyye</li>
+						<li>Charlotte Ipema</li>
+						<li class='bijnaam'>Prezident</li>
+						<li>Ben Sloof</li>
+						<li class='bijnaam'>Comrade</li>
+						<li>Adriaan Groenenboom</li>
+						<li class='bijnaam'>Ministr Finansov</li>
+					</ul>
 				</div>
 			</div>
 
 			<div id='contact' class='story'>
-				<h2 class='story-header'>Contact</h2>
 				<div class='story-body'>
+					<h1 class='story-header'>Contact</h1>
+
+					<p>U kunt contact opnemen met de DiesCie via de <a href='http://csrdelft.nl/actueel/groepen/Commissies/1335' target='_blank'>C.S.R. webstek</a>.</p>
 				</div>
 			</div>
 		</div>
-
-		<!--
-		<div id='selection'>
-			<h1 id='scene-12'><span>12</span>dinsdag</h1>
-			<h1 id='scene-13'><span>13</span>woensdag</h1>
-			<h1 id='scene-14'><span>14</span>donderdag</h1>
-			<h1 id='scene-15'><span>15</span>vrijdag</h1>
-			<h1 id='scene-16'><span>16</span>zaterdag</h1>
-			<h1 id='scene-17'><span>17</span>zondag</h1>
-			<h1 id='scene-18'><span>18</span>maandag</h1>
-			<h1 id='scene-19'><span>19</span>dinsdag</h1>
-			<h1 id='scene-20'><span>20</span>woensdag</h1>
-			<h1 id='scene-21'><span>21</span>donderdag</h1>
-			<h1 id='scene-22'><span>22</span>vrijdag</h1>
-			<h1 id='scene-23'><span>23</span>zaterdag</h1>
-		</div>
-		-->
 
 		<!-- Navigation under window -->
 		<div id='menu'>

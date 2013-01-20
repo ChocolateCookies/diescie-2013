@@ -1,0 +1,9 @@
+
+# JS files (everything's CoffeeScript)
+*.js
+
+# CSS files (everything's SASS)
+*.css
+
+# Build folder, created by deploy.sh
+build/
