@@ -3,7 +3,9 @@ Webstek - DiesCie Ipema 2012-2013 ( Russisch Royaal )
 De source voor de webstek ter ere van de 51e Dies Natalis van Christelijke studentenvereniging Civitas Studiosorum Reformatorum.
 
 Auteur: Adriaan Groenenboom (http://inkworks.nl)
+
 Versie: 1.0 (20-01-2013)
+
 Copyright 2013, Adriaan Groenenboom
 
 Submodules
@@ -106,19 +108,17 @@ Omdat RequireJS geimporteert moet worden, is de volgende tag in de head van inde
 	<script src='vendor/require.js' data-main='scripts/main'></script>
 
 Deze neemt RequireJS op en met de data-main property wordt `scripts/main.js` aangeroepen als main functie.
-In `scripts/main.coffee` wordt RequireJS geconfigureerd (zie de [online RequireJS docs](http://www.requirejs.org/docs/optimization.html#basics) voor meer info)
+In scripts/main.coffee wordt RequireJS geconfigureerd (zie de [online RequireJS docs](http://www.requirejs.org/docs/optimization.html#basics) voor meer info)
 
 Daarna wordt de werkelijke main functie geimporteerd door de volgende script:
 
 	<script> require([ "main_index" ], function() {});</script>
 
-### Production
-Voor de productiefase moeten alle CoffeeScript files in een build file gezet worden.
-Hier komt de `require.js` command-line utility geinstalleerd met `npm` bij kijken.
+### Production & deployment
+Voor de productiefase moeten alle CoffeeScript en SASS files naar een enkel bestand gebuild worden.
+Hier komt de `require.js` command-line utility geinstalleerd met `npm` bij kijken, alsmede het `sass` commando.
 
-__Noot: Om het builden makkelijk te maken is er een build.sh script in de repo opgenomen. 
-U hoeft alleen maar ./build.sh uit te voeren en alle SASS en CoffeeScript files zijn gemaakt.__
+__Noot: Om het builden en deployen makkelijk te maken is er een deploy.sh script in de repo opgenomen. 
+Door ./deploy.sh uit te voeren, wordt er een build/ folder aangemaakt waar alle nodige bestanden in staan die de webserver nodig heeft.__
 
 ### Deployment
-Om de juiste bestanden die naar de server upgeload moeten worden te selecteren, is een deployment script in de repo opgenomen.
-Voer ./deploy.sh uit en er wordt een build/ directory aangemaakt waar de nodige gebouwde bestanden naar gekopieerd worden.
