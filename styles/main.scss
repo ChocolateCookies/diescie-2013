@@ -477,8 +477,22 @@ div#window {
 		}
 	}
 
+	svg#foreground {
+		z-index: 105;
+
+		position: absolute;
+		top: -1px;
+		left: -1px;
+
+		width: 952px;
+		height: 492px;
+
+		pointer-events: none;
+	}
+
 	button#toggle-sound {
-		z-index: 104;
+		//must be above #foreground because of some stupid IE thing
+		z-index: 106;
 
 		position: absolute;
 		bottom: 40px;
@@ -497,19 +511,6 @@ div#window {
 			background-image: url('../images/no-sound.png');
 			cursor: default;
 		} 
-	}
-
-	svg#foreground {
-		z-index: 106;
-
-		position: absolute;
-		top: -1px;
-		left: -1px;
-
-		width: 952px;
-		height: 492px;
-
-		pointer-events: none;
 	}
 }
 
