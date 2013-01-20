@@ -59,7 +59,7 @@ Locatie: vendor/jquery-1.9.0.js
 
 Versie: 1.9.0
 
-[Meer info](www.jquery.com)
+[Meer info](http://www.jquery.com)
 
 Gebruikte jQuery plugins
 -----------------
