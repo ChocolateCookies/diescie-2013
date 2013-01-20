@@ -1,6 +1,16 @@
 
 define ->
+	###
+		Basic Timer class, alternative for window.setTimeout and window.setInterval
+
+		NOT PROPERLY TESTED!!! Do not use unless strictly necessary.
+	###
 	class Timer
+		###
+			@param callback	function called when time's up
+			@param delay	duration for the Timer in ms
+			@param repeat	Timer becomes interval if true
+		###
 		constructor: ( @_callback, delay, @_repeat = false ) ->
 			@_start = 0
 			@_id = null
