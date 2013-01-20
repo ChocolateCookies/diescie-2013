@@ -8,7 +8,9 @@ Copyright 2013, Adriaan Groenenboom
 
 Submodules
 ----------
-Deze repo maakt gebruik van `git submodules`. Deze kunnen geinitialiseerd worden door de commando's `git submodule init` en vervolgens `git submodule update` aan te roepen. Raadpleeg de git handleiding voor meer info.
+Deze repo maakt gebruik van `git submodules`. 
+Deze kunnen geinitialiseerd worden door de commando's `git submodule init` en vervolgens `git submodule update` aan te roepen. 
+Raadpleeg de [http://git-scm.com/book/en/Git-Tools-Submodules](git handleiding) voor meer info.
 
 Gebruikte tools
 ---------------
@@ -23,25 +25,38 @@ Versie: 1.4.0
 [Meer info](www.coffeescript.org)
 
 ### SASS (Syntactically Awesome StyleSheets)
-Een syntax alternatief voor CSS. Geeft de mogelijkheid om variabelen en ingebouwde- en eigen functies (mixins) te gebruiken. Compilet naar CSS met het `sass` commando:
+Een syntax alternatief voor CSS. 
+Deze geeft de mogelijkheid om variabelen en ingebouwde- en eigen functies (mixins) te gebruiken. 
+Compilet naar CSS met het `sass` commando:
 
 	sass --watch .:.
 
+__Noot: Om het project te builden is de command-line tool nodig, te installeren via de package manager van de linux distro.__
+
 Versie: 3.2.5
+
 [Meer info](www.sass-lang.com)
 
 ### RequireJS
 Een JavaScript fileloader en module manager. Regelt closure en imports door middel van de functies `include` en `require`.
 
+__Noot: Om het project te builden is een command-line tool nodig, te installeren met het volgende commando:__
+
+	npm install -g requirejs
+
 Locatie: vendor/require.js
+
 Versie: 2.1.2
+
 [Meer info](www.requirejs.org)
 
 ### jQuery
 Een JavaScript library voor triviale en geavanceerde functies, waaronder event handling en DOM manipulatie.
 
 Locatie: vendor/jquery-1.9.0.js
+
 Versie: 1.9.0
+
 [Meer info](www.jquery.com)
 
 Gebruikte jQuery plugins
@@ -50,21 +65,60 @@ Gebruikte jQuery plugins
 Implementeert een eenvoudige bookmarkable geschiedenis en event handling op basis van window.location.hash, te zien als een string achter het hash (#) teken in de adresbalk.
 
 Locatie: vendor/jQueryHashChange/
+
 Versie: 1.3
+
 [Meer info](https://github.com/cowboy/jquery-hashchange/tree/v1.3)
 
 ### jQueryScrollPath
 Een jQuery plugin waarmee een pad gedefinieerd kan worden waar de browser overheen scrollt of animeert.
 
 Locatie: vendor/jQueryScrollPath/
+
 Versie: 1.1.1 (forked & editted, zie commit messages)
+
 [Meer info (forked & editted)](https://github.com/inkworks/scrollpath.git)
+
 [Meer info (origineel)](https://github.com/JoelBesada/scrollpath)
 
 ### jQueryWaitForImages
 Een jQuery plugin die het laden van afbeeldingen regelt. Een event wordt getriggert zodra alle <img> en CSS sources geladen zijn.
 
 Locatie: vendor/jQueryWaitForImages/
+
 Versie: 1.4.2
+
 [Meer info](https://github.com/alexanderdickson/waitForImages.git)
 
+Builden
+-------
+De RequireJS library importeert de JS files als modules. De development werkt met andere files dan de production versie. 
+
+__Noot: om het wisselen tussen development en production makkelijk te maken, zijn de tags al in index.html opgenomen.
+Het enige wat u hoeft te doen, is de comment tags (<!-- -->) weg te halen, zodat de juiste modus geactiveerd wordt.__
+
+Lees verder voor gedetaileerde uitleg.
+
+### Development
+Alle files nodig voor development zitten vanaf de root directory, met uitzondering van de build/ directory. 
+Omdat RequireJS geimporteert moet worden, is de volgende tag in de head van index.html opgenomen:
+	
+	<script src='vendor/require.js' data-main='scripts/main'></script>
+
+Deze neemt RequireJS op en met de data-main property wordt `scripts/main.js` aangeroepen als main functie.
+In `scripts/main.coffee` wordt RequireJS geconfigureerd (zie de [online RequireJS docs](www.requirejs.org/docs/optimization.html#basics) voor meer info)
+
+Daarna wordt de werkelijke main functie geimporteerd door de volgende script:
+
+	<script> require([ "main_index" ], function() {});</script>
+
+### Production
+Voor de productiefase moeten alle CoffeeScript files in een build file gezet worden.
+Hier komt de `require.js` command-line utility geinstalleerd met `npm` bij kijken.
+
+__Noot: Om het builden makkelijk te maken is er een build.sh script in de repo opgenomen. 
+U hoeft alleen maar ./build.sh uit te voeren en alle SASS en CoffeeScript files zijn gemaakt.__
+
+### Deployment
+Om de juiste bestanden die naar de server upgeload moeten worden te selecteren, is een deployment script in de repo opgenomen.
+Voer ./deploy.sh uit en er wordt een build/ directory aangemaakt waar de nodige gebouwde bestanden naar gekopieerd worden.
