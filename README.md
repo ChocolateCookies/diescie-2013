@@ -40,7 +40,7 @@ Versie: 2.1.2
 ### jQuery
 Een JavaScript library voor triviale en geavanceerde functies, waaronder event handling en DOM manipulatie.
 
-Locatie: vendor/jQuery/
+Locatie: vendor/jquery-1.9.0.js
 Versie: 1.9.0
 [Meer info](www.jquery.com)
 
