@@ -24,6 +24,7 @@ Een syntax alternatief voor JavaScript. De code is python-achtig en compilet naa
 __Noot: command-line tool installeren met ruby gem (zie meer info)__
 
 Versie: 1.4.0
+
 [Meer info](http://www.coffeescript.org)
 
 ### SASS (Syntactically Awesome StyleSheets)
@@ -135,4 +136,15 @@ Om alle JavaScript modules in een file te zetten, wordt het volgende commando ui
 (zie de [online RequireJS docs](http://www.requirejs.org/docs/optimization.html#basics) voor meer info):
 
 	r.js -o baseUrl='scripts/' name='main_index' out='scripts/main_index-built.js' mainConfigFile='scripts/main.js'
+
+De manier van scripts importeren verandert door het gebruik van een JS file in plaats van meerdere files.
+Hiertoe moet index.html aangepast worden.
+De HTML code lijkt sterk op die van de development fase, met uitzondering van een paar subtiele verschillen.
+RequireJS is nog steeds nodig, maar de het main script hoeft niet meer aangegeven te worden, want deze wordt direct geimporteerd.
+De development code wordt zo dus vervangen door de volgende regels:
+
+		<script src='vendor/require.js'></script>
+		<script src='scripts/main_index-built.js'></script>
+	
+In `scripts/main_index-build.js` staat het gehele script, inclusief alle benodigde modules en de main procedure.
 
