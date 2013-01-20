@@ -41,7 +41,7 @@ Versie: 3.2.5
 [Meer info](http://www.sass-lang.com)
 
 ### RequireJS
-Een JavaScript fileloader en module manager. Regelt closure en imports door middel van de functies `include` en `require`.
+Een JavaScript fileloader en module manager. Regelt closure en imports door middel van de functies `define` en `require`.
 
 __Noot: Om het project te builden is een command-line tool nodig, te installeren met het volgende commando:__
 
