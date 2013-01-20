@@ -121,4 +121,18 @@ Hier komt de `require.js` command-line utility geinstalleerd met `npm` bij kijke
 __Noot: Om het builden en deployen makkelijk te maken is er een deploy.sh script in de repo opgenomen. 
 Door ./deploy.sh uit te voeren, wordt er een build/ folder aangemaakt waar alle nodige bestanden in staan die de webserver nodig heeft.__
 
-### Deployment
+Lees verder voor gedetaileerde uitleg.
+
+Het builden van de SASS files geschiedt met het volgende commando in de `styles` directory:
+	
+	sass main.scss:main.css
+
+Het builden van de CoffeeScript files geschiedt met het volgende commando:
+
+	coffee --compile scripts/
+
+Om alle JavaScript modules in een file te zetten, wordt het volgende commando uitgevoerd 
+(zie de [online RequireJS docs](http://www.requirejs.org/docs/optimization.html#basics) voor meer info):
+
+	r.js -o baseUrl='scripts/' name='main_index' out='scripts/main_index-built.js' mainConfigFile='scripts/main.js'
+
