@@ -17,7 +17,7 @@ Raadpleeg de [git handleiding](http://git-scm.com/book/en/Git-Tools-Submodules) 
 Gebruikte tools
 ---------------
 ### CoffeeScript
-Een effectief syntax alternatief voor JavaScript. De code is python-achtig en compilet naar JavaScript met behulp van het `coffee` commando:
+Een syntax alternatief voor JavaScript. De code is python-achtig en compilet naar JavaScript met behulp van het `coffee` commando:
 
 	coffee --compile --watch .
 
@@ -28,7 +28,7 @@ Versie: 1.4.0
 [Meer info](http://www.coffeescript.org)
 
 ### SASS (Syntactically Awesome StyleSheets)
-Een krachtig syntax alternatief voor CSS. 
+Een syntax alternatief voor CSS. 
 Deze library geeft onder andere de mogelijkheid om variabelen en ingebouwde- en eigen functies (mixins) te gebruiken. 
 SASS compilet naar CSS met het `sass` commando:
 
@@ -54,7 +54,7 @@ Versie: 2.1.2
 [Meer info](http://www.requirejs.org)
 
 ### jQuery
-Een JavaScript library die triviale en geavanceerde functies levert, waaronder event handling en DOM manipulatie.
+Een krachtige JavaScript library die triviale en geavanceerde functies levert, waaronder event handling en DOM manipulatie.
 
 Locatie: vendor/jquery-1.9.0.js
 
@@ -138,13 +138,13 @@ Om alle JavaScript modules in een file te zetten, wordt het volgende commando ui
 	r.js -o baseUrl='scripts/' name='main_index' out='scripts/main_index-built.js' mainConfigFile='scripts/main.js'
 
 De manier van scripts importeren verandert door het gebruik van een JS file in plaats van meerdere files.
-Hiertoe moet index.html aangepast worden.
+Hierop moet index.html aangepast worden.
 De HTML code lijkt sterk op die van de development fase, met uitzondering van een paar subtiele verschillen.
 RequireJS is nog steeds nodig, maar de het main script hoeft niet meer aangegeven te worden, want deze wordt direct geimporteerd.
 De development code wordt zo dus vervangen door de volgende regels:
 
-		<script src='vendor/require.js'></script>
-		<script src='scripts/main_index-built.js'></script>
+	<script src='vendor/require.js'></script>
+	<script src='scripts/main_index-built.js'></script>
 	
 In `scripts/main_index-build.js` staat het gehele script, inclusief alle benodigde modules en de main procedure.
 
