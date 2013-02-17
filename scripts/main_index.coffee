@@ -58,4 +58,20 @@ require [
 				t++
 			, 500 )
 		)
+
+		# Programma page initiation
+		completed = true
+		$completed = jQuery( "div#completed" )
+		jQuery( "button#toggle-completed" ).show().on( "click", ->
+			if completed
+				completed = false
+				$completed.hide()
+				jQuery( @ ).find( "span#open-completed" ).show()
+				jQuery( @ ).find( "span#close-completed" ).hide()
+			else
+				completed = true
+				$completed.show()
+				jQuery( @ ).find( "span#open-completed" ).hide()
+				jQuery( @ ).find( "span#close-completed" ).show()
+		).trigger( "click" )
 	)

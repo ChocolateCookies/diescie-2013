@@ -95,6 +95,15 @@ h2 {
 	}
 }
 
+h3 {
+	margin: 0px;
+
+	@include font-chopin;
+	font-size: 25pt;
+	color: $title-gray;
+	font-weight: normal;
+}
+
 a {
 	@include transition( color, 0.2s, linear );
 }
@@ -328,6 +337,12 @@ div#window {
 				text-transform: lowercase;
 			}
 
+			h3.separator {
+				font-size: 20pt;
+				text-align: center;
+				padding-bottom: 20px;
+			}
+
 			p {
 				margin: 0px;
 				padding: 22px 0px;
@@ -362,6 +377,24 @@ div#window {
 		}
 
 		&#programma {
+			button#toggle-completed {
+				display: none;
+
+				@include font-chopin;
+				font-size: 25pt;
+				color: $title-gray;
+				margin-left: -30px;
+				@include transition( color, 0.5s, linear);
+
+				span {
+					font-size: 20pt;
+				}
+
+				&:hover {
+					color: $shade-gray;
+				}
+			}
+
 			div.schedule, div.dancing {
 				margin-bottom: 30px;
 
@@ -390,7 +423,6 @@ div#window {
 			
 			div.dancing {
 				padding: 20px 0px;
-				padding-bottom: 44px;
 
 				margin: 0px;
 			}

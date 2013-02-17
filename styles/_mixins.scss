@@ -181,7 +181,7 @@
 		font-family: $family;
 		src: url( $base-path + ".eot" );
 		src: local("☺"),
-			url( $base-path + ".woff" ) format( "woff" ), 
+			//url( $base-path + ".woff" ) format( "woff" ), WOFF conflicts with Safari
 			url( $base-path + ".ttf" ) format( "truetype" ), 
 			url( $base-path + ".svg" ) format( "svg" );
 		font-weight: $weight;
