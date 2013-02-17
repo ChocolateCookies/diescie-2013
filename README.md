@@ -1,10 +1,10 @@
 Webstek - DiesCie Ipema 2012-2013 ( Russisch Royaal )
 =====================================================
-De broncode voor de webstek ter ere van de 51e Dies Natalis van Christelijke studentenvereniging Civitas Studiosorum Reformatorum.
+De broncode voor de webstek ter ere van de 51e Dies Natalis van christelijke studentenvereniging Civitas Studiosorum Reformatorum.
 
 Auteur: Adriaan Groenenboom (http://inkworks.nl)
 
-Versie: 1.0 (20-01-2013)
+Versie: 1.1 (17-02-2013)
 
 Copyright 2013, Adriaan Groenenboom
 
