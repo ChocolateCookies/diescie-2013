@@ -4,3 +4,6 @@
 [submodule "vendor/jQueryScrollPath"]
 	path = vendor/jQueryScrollPath
 	url = https://github.com/inkworks/scrollpath.git
+[submodule "vendor/jQueryWaitForImages"]
+	path = vendor/jQueryWaitForImages
+	url = https://github.com/alexanderdickson/waitForImages.git

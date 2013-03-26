@@ -129,11 +129,19 @@
     background: linear-gradient(top, $color1 0%,$color2 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$color1}', endColorstr='#{$color2}',GradientType=0 ); /* IE6-9 */
 }
+/**
+ * CSS3 Background Clip
+ * @param $type
+ */
 @mixin background-clip($type) {
 	-webkit-background-clip: $type;
 	-moz-background-clip: $type;
 	background-clip: $type;
 }
+/**
+ * CSS3 Opacity
+ * @param $value (0.0 - 1.0)
+ */
 @mixin opacity($value) {
 	opacity: $value;
 	filter: alpha(opacity=$value*100);
@@ -141,6 +149,42 @@
 	-khtml-opacity: $value;
 	-moz-opacity: $value;
 }
-@mixin text-border( $color ) {
-	text-shadow: -1px 0 $color, 0 1px $color, 1px 0 $color, 0 -1px $color;
+/**
+ * CSS3 Text Outer Border
+ * @param $color
+ * @param $size
+ */
+@mixin text-border( $color, $size: 1px ) {
+	text-shadow: $size*-1 0 $color, 0 $size $color, $size 0 $color, 0 $size*-1 $color;
+}
+/**
+ * CSS3 Selection
+ * @param $color
+ */
+@mixin selection( $color ) {
+	::selection {
+		background: $color; /* Safari */
+		}
+	::-moz-selection {
+		background: $color; /* Firefox */
+	}
+}
+/**
+ * CSS3 Font Face
+ * @param $family
+ * @param $base-path (consistent basename and path for eot, woff, ttf and svg)
+ * @param $weight
+ * @param $style
+ */
+@mixin font-face( $family, $base-path, $weight: normal, $style: normal ) {
+	@font-face {
+		font-family: $family;
+		src: url( $base-path + ".eot" );
+		src: local("☺"),
+			//url( $base-path + ".woff" ) format( "woff" ), WOFF conflicts with Safari
+			url( $base-path + ".ttf" ) format( "truetype" ), 
+			url( $base-path + ".svg" ) format( "svg" );
+		font-weight: $weight;
+		font-style: $style;
+	}
 }

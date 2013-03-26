@@ -1,30 +1,14 @@
 @import "_mixins.scss";
 
-@font-face {
-	font-family: "Ornamental Versals";
-	src: url("../fonts/ornamentalversals_black.ttf");
-}
+@include font-face( "Ornamental Versals", "../fonts/ornamentalversals_black/ornamentalversals_black" );
 
-@font-face {
-	font-family: "Chopin Script";
-	src: url("../fonts/chopinscript.otf");
-}
+@include font-face( "Gothic I", "../fonts/gothici/gothici" );
 
-@font-face {
-	font-family: "Trajan Pro";
-	src: url("../fonts/trajanpro.otf");
-}
+@include font-face( "Chopin Script", "../fonts/chopinscript/chopinscript" );
 
-@font-face {
-	font-family: "Trajan Pro";
-	font-weight: bold;
-	src: url("../fonts/trajanpro_bold.otf");
-}
+@include font-face( "Trajan Pro", "../fonts/trajanpro/trajanpro" );
 
-@font-face {
-	font-family: "Gothic I";
-	src: url("../fonts/gothici.ttf");
-}
+@include font-face( "Trajan Pro", "../fonts/trajanpro_bold/trajanpro_bold", bold );
 
 $light-gray: #b2b2b2;
 $shade-gray: #2f2f2f;
@@ -69,6 +53,8 @@ body {
 
 	background: $dark-gray;
 	overflow: hidden;
+
+	@include selection( $turquoise );
 }
 
 img#logo {
@@ -76,11 +62,32 @@ img#logo {
 	top: 50%;
 	left: 50%;
 
-	margin-left: 105px;
-	margin-top: -303px;
+	margin-left: -405px;
+	margin-top: -298px;
+}
+
+img#subtitle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	margin-left: 200px;
+	margin-top: -270px;
+}
+
+img.hidden {
+	display: none;
 }
 
 h1 {
+	margin: 0px;
+
+	@include font-chopin;
+}
+
+h2 {
+	margin: 0px;
+
 	@include font-mental;
 
 	span {
@@ -88,8 +95,13 @@ h1 {
 	}
 }
 
-h2 {
+h3 {
+	margin: 0px;
+
 	@include font-chopin;
+	font-size: 25pt;
+	color: $title-gray;
+	font-weight: normal;
 }
 
 a {
@@ -126,7 +138,7 @@ div#window {
 		width: 4961px;
 		height: 3508px;
 
-		background: transparent url("../images/background.png") no-repeat left top;
+		background: transparent url("../images/background.jpg") no-repeat left top;
 	}
 
 	div.slide-title {
@@ -136,10 +148,13 @@ div#window {
 
 		position: absolute;
 
-		h1 {
+		h2 {
 			position: relative;
 
-			margin-bottom: 8px;
+			margin: {
+				top: 0px;
+				bottom: 8px;
+			}
 
 			text-align: right;
 
@@ -147,10 +162,13 @@ div#window {
 			color: $title-gray;
 		}
 
-		h2 {
+		h1 {
 			position: relative;
 
-			margin-top: 0px;
+			margin: {
+				top: 0px;
+				bottom: 2em;
+			}
 
 			@include text-border( $dark-turq );
 			color: $turquoise;
@@ -159,10 +177,10 @@ div#window {
 		}
 
 		&.left {
-			h1 {
+			h2 {
 				text-align: left;
 			}
-			h2 {
+			h1 {
 				text-align: right;
 			}
 		}
@@ -181,17 +199,37 @@ div#window {
 		background: black;
 	}
 
-	svg#foreground {
-		z-index: 106;
+	h1#loading {
+		z-index: 101;
 
 		position: absolute;
 		top: 0px;
 		left: 0px;
 
 		width: 100%;
-		height: 100%;
 
-		pointer-events: none;
+		margin: 240px 0px;
+
+		text-align: center;
+		color: $turquoise;
+		font-size: 20pt;
+
+		@include opacity( 0.5 );
+	}
+
+	button.control {
+		color: $turquoise;
+		@include text-border( $dark-turq );
+		vertical-align: middle;
+		text-align: right;
+
+		@include opacity( 0.6 );
+
+		@include transition( opacity, 0.5s, linear);
+
+		&:hover {
+			@include opacity( 1 );
+		}
 	}
 
 	div#controls {
@@ -204,25 +242,11 @@ div#window {
 		button {
 			display: none;
 
-			position: absolute;
 			bottom: 0px;
 			right: 0px;
 
 			height: 50px;
 			margin: 0px;
-
-			color: $turquoise;
-			@include text-border( $dark-turq );
-			vertical-align: middle;
-			text-align: right;
-
-			@include opacity( 0.6 );
-
-			@include transition( opacity, 0.5s, linear);
-
-			&:hover {
-				@include opacity( 1 );
-			}
 
 			&#play {
 				width: 300px;
@@ -256,6 +280,209 @@ div#window {
 		}
 	}
 
+	div.story {
+		display: none;
+
+		z-index: 103;
+
+		position: absolute;
+		left: 0px;
+		top: 0px;
+
+		width: $window-width;
+		height: $window-height;
+
+		overflow: auto;
+		overflow-x: hidden;
+
+		h1.story-header {
+			height: 146px - 55px;
+
+			padding: {
+				top: 55px;
+			}
+
+			font-size: 40pt;
+			color: $turquoise;
+			@include text-border( $dark-turq );
+		}
+		
+		div.story-body {
+			min-height: $window-height;
+			width: $window-width - 140px - 95px;
+
+			padding: {
+				left: 140px;
+				right: 95px;
+			}
+
+			@include font-chopin;
+			color: $shade-gray;
+			font-size: 22pt;
+			text-align: justify;
+
+			background: transparent url('../images/story-bg.jpg') repeat left top;
+
+			h1 {
+				margin-left: -10px;
+				margin-bottom: 13px;
+
+				line-height: 75px;
+			}
+
+			h2 {
+				margin-bottom: -40px;
+
+				line-height: 84px;
+				text-transform: lowercase;
+			}
+
+			h3.separator {
+				font-size: 20pt;
+				text-align: center;
+				padding-bottom: 20px;
+			}
+
+			p {
+				margin: 0px;
+				padding: 22px 0px;
+
+				line-height: 44px;
+
+				&:first-child {
+					padding-top: 15px;
+				}
+
+				span.initial {
+					float: left;
+
+					padding: 0px 10px;
+
+					@include font-mental;
+					font-size: 60pt;
+
+					line-height: 85px;
+				}
+			}
+
+			a {
+				color: $dark-turq;
+				text-decoration: none;
+				@include text-shadow( 1px, 1px, 0px, $light-gray );
+			}
+
+			a:hover {
+				color: $shade-turq;
+			}
+		}
+
+		&#programma {
+			button#toggle-completed {
+				display: none;
+
+				@include font-chopin;
+				font-size: 25pt;
+				color: $title-gray;
+				margin-left: -30px;
+				@include transition( color, 0.5s, linear);
+
+				span {
+					font-size: 20pt;
+				}
+
+				&:hover {
+					color: $shade-gray;
+				}
+			}
+
+			div.schedule, div.dancing {
+				margin-bottom: 30px;
+
+				h2 {
+					line-height: 69px;
+					margin-bottom: -11px;
+
+					@include text-shadow( 1px, 1px, 1px, darken( white, 20% ));
+
+					span {
+						font-size: 22pt;
+						line-height: 0px;
+					}
+				}
+
+				p {
+					padding: 0px;
+					padding-left: 40px;
+
+					span {
+						padding-right: 10px;
+						font-size: 20pt;
+					}
+				}
+			}
+			
+			div.dancing {
+				padding: 20px 0px;
+
+				margin: 0px;
+			}
+		}
+
+		&#selectie {
+			p.scene {
+				padding: {
+					top: 0px;
+					bottom: 30px;
+				}
+
+				font-size: 30pt;
+
+				img {
+					margin: {
+						right: 10px;
+					}
+
+					vertical-align: middle;
+				}
+			}
+		}
+		
+		&#commissie {
+			img {
+				float: left;
+
+				padding-right: 5px;
+
+				vertical-align: middle;
+			}
+
+			ul#diescie-ipema {
+				width: 675px;
+				height: 402px;
+
+				margin: 0px;
+
+				list-style-type: none;
+
+				padding: {
+					top: 20px;
+					bottom: 20px;
+				}
+
+				font-size: 24pt;
+
+				li.bijnaam {
+					padding-bottom: 10px;
+
+					font-size: 19pt;
+					color: $dark-turq;
+					text-align: right;
+					@include text-shadow( 1px, 0px, 0px, $light-gray );
+				}
+			}
+		}
+	}
+
 	button#close-story {
 		display: none;
 
@@ -282,119 +509,40 @@ div#window {
 		}
 	}
 
-	div.story {
-		display: none;
-
-		z-index: 103;
+	svg#foreground {
+		z-index: 105;
 
 		position: absolute;
-		left: 0px;
-		top: 0px;
+		top: -1px;
+		left: -1px;
 
-		width: $window-width;
-		height: $window-height;
+		width: 952px;
+		height: 492px;
 
-		overflow: auto;
-		overflow-x: hidden;
+		pointer-events: none;
+	}
 
-		h2.story-header {
-			width: $window-width - 140px;
-			height: 146px - 55px;
+	button#toggle-sound {
+		//must be above #foreground because of some stupid IE thing
+		z-index: 106;
 
-			margin: 0px;
+		position: absolute;
+		bottom: 40px;
+		left: 55px;
 
-			padding: {
-				left: 140px;
-				top: 55px;
-			}
+		width: 35px;
+		height: 27px;
 
-			font-size: 40pt;
-			color: $turquoise;
-			@include text-border( $dark-turq );
+		background: transparent url('../images/sound-on.png') no-repeat left top;
 
-			background: transparent url('../images/story-header.jpg') no-repeat left top;
+		&.sound-off {
+			background-image: url('../images/sound-off.png');
 		}
-		
-		div.story-body {
-			min-height: $window-height - 146px;
-			width: $window-width - 140px - 95px;
 
-			padding: {
-				left: 140px;
-				right: 95px;
-			}
-
-			@include font-chopin;
-			color: $shade-gray;
-			font-size: 22pt;
-			text-align: justify;
-
-			background: transparent url('../images/story-body.jpg') repeat left top;
-
-			p {
-				margin: 0px;
-				padding: 0.5em 0px;
-
-				line-height: 1.5em;
-
-				span.initial {
-					float: left;
-
-					padding: 0px 8px;
-
-					@include font-mental;
-					font-size: 3em;
-
-					line-height: 1em;
-				}
-			}
-
-			div.prog-dag, div.dansles {
-				margin-bottom: 20.5pt;
-
-				h1 {
-					text-transform: lowercase;
-					margin: 0px;
-					margin-bottom: -0.5em;
-
-					line-height: 3em;
-
-					@include text-shadow( 1px, 1px, 1px, darken( white, 20% ));
-
-					span {
-						font-size: 22pt;
-						line-height: 0em;
-					}
-				}
-
-				p {
-					padding: 0px;
-					padding-left: 40px;
-
-					line-height: 1.5em;
-					span {
-						padding-right: 10px;
-						font-size: 20pt;
-					}
-				}
-
-				a {
-					color: $dark-turq;
-					text-decoration: none;
-				}
-
-				a:hover {
-					color: $shade-turq;
-				}
-			}
-			
-			div.dansles {
-				padding: 20px 0px;
-				padding-bottom: 2em;
-
-				margin: 0px;
-			}
-		}
+		&.no-sound {
+			background-image: url('../images/no-sound.png');
+			cursor: default;
+		} 
 	}
 }
 
@@ -436,7 +584,7 @@ div#menu {
 	}
 }
 
-$deftop: 30px;
+$deftop: 40px;
 $defright: 100px;
 
 div#leo {
@@ -444,12 +592,12 @@ div#leo {
 	right: 100px;
 }
 
-div#receptie {
+div#recepski {
 	top: $deftop;
 	right: 100px;
 }
 
-div#lezing {
+div#letszing {
 	top: $deftop;
 	right: 100px;
 }
@@ -459,17 +607,17 @@ div#tsarwars {
 	right: 100px;
 }
 
-div#excursie {
+div#ekskurzyi {
 	top: $deftop;
 	left: 90px;
 }
 
-div#brusjesdag {
+div#bruzjesdag {
 	top: $deftop;
 	left: 400px;
 }
 
-div#spellen {
+div#gsg {
 	top: $deftop;
 	left: 90px;
 }
@@ -479,17 +627,17 @@ div#hv {
 	left: 100px;
 }
 
-div#cabaret {
+div#kabarad {
 	top: 65px;
 	left: 100px;
 }
 
-div#turbokring {
+div#tyurbokring {
 	top: $deftop;
 	left: 300px;
 }
 
-div#verticalenstrijd {
+div#stryd {
 	top: $deftop;
 	left: 200px;
 }
@@ -499,7 +647,7 @@ div#gala {
 	left: 80px;
 }
 
-div#dedebrunch {
+div#dedebryunsz {
 	top: $deftop;
 	right: 100px;
 }

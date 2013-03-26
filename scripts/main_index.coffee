@@ -1,8 +1,10 @@
 
+
 require [
-	"cs!AnimationControl"
+	"AnimationControl"
 	"jQuery/Easing"
 	"jQuery/HashChange"
+	"jQuery/WaitForImages"
 ], ( AnimationControl ) ->
 
 	closeStory = ->
@@ -17,21 +19,59 @@ require [
 			jQuery( "button#play span" ).show()
 		)
 		jQuery( "button#close-story" ).stop().fadeIn( 200 )
-
-	jQuery( document ).ready ->
-		c = new AnimationControl()
-		c.select( "start" )
+	
+	initPage = ( music ) ->
+		c = new AnimationControl( music )
+		c.reboot()
 
 		jQuery( window ).hashchange( ->
 			hash = location.hash.substr( 1 )
 
+			# change story/scene
 			if hash is ""
 				closeStory()
 			else
 				c.stop()
-				openStory( hash )
+				if match = /^scn\:(.*)/.exec( hash )
+					# it's a scene
+					closeStory()
+					c.select( match[ 1 ])
+				else
+					# it's a story
+					openStory( hash )
 		)
 
 		# detect hash at page load
 		jQuery( window ).trigger( "hashchange" )
-			
+
+
+	jQuery( document ).ready( ->
+		jQuery( window ).waitForImages( ->
+			# give the music a number of seconds to load
+			t = 0
+			int = window.setInterval( =>
+				if musicIsReady? and musicIsReady or t >= 20
+					jQuery( "h1#loading" ).fadeOut( 250 )
+					initPage( t < 20 )
+					window.clearInterval( int )
+				# increment timeout
+				t++
+			, 500 )
+		)
+
+		# Programma page initiation
+		completed = true
+		$completed = jQuery( "div#completed" )
+		jQuery( "button#toggle-completed" ).show().on( "click", ->
+			if completed
+				completed = false
+				$completed.hide()
+				jQuery( @ ).find( "span#open-completed" ).show()
+				jQuery( @ ).find( "span#close-completed" ).hide()
+			else
+				completed = true
+				$completed.show()
+				jQuery( @ ).find( "span#open-completed" ).hide()
+				jQuery( @ ).find( "span#close-completed" ).show()
+		).trigger( "click" )
+	)

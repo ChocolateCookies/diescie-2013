@@ -1,96 +1,138 @@
 
 define [
-	"cs!Timer"
-	"cs!Timers"
+	"Timer"
+	"Timers"
 	"jQuery/jQuery"
 	"jQuery/ScrollPath"
 	"jQuery/Easing"
-	"jQuery/Pause"
 ], ( Timer, Timers ) ->
 	
+	###
+		Class for managing the animation for the background image.
+		Also manages audio (if enabled).
+	###
 	BG_SEL = "div#background"
 	FG_SEL = "svg#foreground"
 	BLACK_SEL = "div#black"
+	MUSIC_SEL = "#music"
 
 	FADEOUT_DUR = 500
 	FADEIN_DUR = 550
 	BLACK_DUR = 300
 	FADE_DUR = FADEOUT_DUR + BLACK_DUR + FADEIN_DUR
 
-	SPEED = 1
+	# Durations for ScrollPath animation
+	INTRO = [
+		9000
+	]
 
-	START_1 = 4500
+	LEO = [
+		10000
+		8000
+		4000
+	]
+	LEO_TEXT = 11000
 
-	LEO_1 = 5000
-	LEO_2 = 8000
-	LEO_3 = 2000
-	LEO_TEXT = 7000
+	RECEPTIE = [
+		3000
+		9000
+		3000
+	]
+	RECEPTIE_TEXT = 5000
 
-	RECEPTIE_1 = 2000
-	RECEPTIE_2 = 7000
-	RECEPTIE_3 = 4000
-	RECEPTIE_TEXT = 2800
+	LEZING = [
+		11000 # pan
+		8000 # stairs
+		800
+	]
+	LEZING_TEXT = 800
 
-	LEZING_1 = 9000
-	LEZING_2 = 5000
-	LEZING_3 = 500
-	LEZING_TEXT = 2000
-
-	TSARWARS_1 = 8000
-	TSARWARS_2 = 4000
-	TSARWARS_3 = 7000
+	TSARWARS = [
+		8000
+		5000
+		8000
+	]
 	TSARWARS_TEXT = 1500
 
-	EXCURSIE_1 = 5000 # wait
-	EXCURSIE_2 = 4000
-	EXCURSIE_TEXT = 500
+	EXCURSIE = [
+		4500 # wait
+		8000
+	]
+	EXCURSIE_TEXT = 1500
 
-	BRUSJES_1 = 7000
-	BRUSJES_2 = 5000
-	BRUSJES_TEXT = 1500
+	BRUSJES = [
+		8000
+	]
+	BRUSJES_TEXT = 500
 
-	SPELLEN_1 = 5000
-	SPELLEN_2 = 800
-	SPELLEN_TEXT = 300
+	SPELLEN = [
+		6400
+		1000
+	]
+	SPELLEN_TEXT = 0
 
-	HV_1 = 10000
-	HV_2 = 5000
-	HV_TEXT = 4000
+	HV = [
+		9500
+		2500
+	]
+	HV_TEXT = 2500
 
-	CABARET_1 = 14000
-	CABARET_2 = 9000
+	CABARET = [
+		11500
+		8000
+	]
 	CABARET_TEXT = 3000
 
-	TURBO_1 = 10000
-	TURBO_2 = 1500 # pause
-	TURBO_3 = 900 # jump on pole
-	TURBO_4 = 800 # balance
-	TURBO_5 = 1000 # leap
-	TURBO_TEXT = 3000
+	TURBO = [
+		11000
+		1000 # pause
+		800 # jump on pole
+		600 # balance
+		600 # balance
+		600 # balance
+		600 # balance
+		1000 # leap
+	]
+	TURBO_TEXT = 4500
 
-	STRIJD_1 = 250 # recoil
-	STRIJD_2 = 300 # recoil
-	STRIJD_3 = 6000
-	STRIJD_4 = 1200
-	STRIJD_5 = 2000
-	STRIJD_TEXT = 2000
+	STRIJD = [
+		250 # recoil
+		300 # recoil
+		11000
+		1200
+		2500
+	]
+	STRIJD_TEXT = 4000
 
-	GALA_1 = 6000
-	GALA_2 = 6000
-	GALA_3 = 1500 # fade out duration
-	GALA_TEXT = 3500
+	GALA = [
+		9000
+		5500
+		1500 # fade out duration
+	]
+	GALA_TEXT = 4000
 
-	BRUNCH_1 = 8000
-	BRUNCH_TEXT = 4000
+	BRUNCH = [
+		9000
+	]
+	BRUNCH_TEXT = 5000
 	
 	class AnimationControl
-		constructor: ->
+		constructor: ( @_music_enabled = true ) ->
 			@_fade_timer = null
 			@_timers = new Timers()
+
 			@_current_scene = null;
 
+			# audio related members
+			@_music = document.getElementById( "music" )
+			@_current_volume = 1
+			@_mute = false
+			@_replaycount = 0
+
+			# initialize the ScrollPath to animate over
 			@_init_scrollpath()
 
+			# event handlers
 			jQuery( "button#play" ).on "click", =>
 				@continue()
 
@@ -98,21 +140,60 @@ define [
 				@stop()
 
 			jQuery( "button#replay" ).on "click", =>
+				# a litte TRO'LIN
+				@_replaycount++
+				if @_music_enabled and @_replaycount == 8 # b'vo
+					@_music.pause()
+					@_music = document.getElementById( "trolmusic" )
+
 				@reboot()
+
+			if @_music_enabled
+				# init sound controls
+				jQuery( "button#toggle-sound" ).on "click", ( e ) =>
+					el = jQuery( e.target )
+					if el.hasClass( "sound-off" )
+						@_mute = false
+						jQuery( @_music ).stop().animate(
+							volume: @_current_volume
+						, 300 )
+					else
+						@_mute = true
+						@_current_volume = @_music.volume
+						jQuery( @_music ).stop().animate(
+							volume: 0
+						, 300 )
+
+					el.toggleClass( "sound-off" )
+			else
+				jQuery( "button#toggle-sound" ).addClass( "no-sound" )
 			
 		select: ( scene ) ->
+			# check existance of scene
 			if typeof @[ "_#{scene}" ] is "function"
+				@stop()
 				@_current_scene = scene
 				@_fadeout_in( BLACK_DUR, => 
 					@_reset_text()
 					@[ "_#{scene}" ]() 
 				)
 				@_ctrl_pause()
+
+				if @_music_enabled
+					# start playing at the right time
+					@_music.play()
+					@_music.currentTime = Math.round( @_get_music_ms( scene ) / 1000 )
+
+				if not @_mute
+					# fade in music
+					jQuery( @_music ).stop().animate(
+						volume: 1
+					, 300 )
 			else
 				jQuery.error( "#{scene} is not a valid scene" )
 
 		reboot: ->
-			@select( "start" )
+			@select( "intro" )
 
 		continue: ->
 			@select( @_current_scene )
@@ -121,22 +202,22 @@ define [
 			return @_current_scene
 
 		stop: ->
+			# stop ScrollPath animation
 			if @_timers? then @_timers.stop()
 			jQuery( "div.slide-title > *" ).stop()
-			if @_fade_timer? then @_fade_timer.stop()
-			jQuery( "div#black" ).stop()
 			jQuery.fn.scrollPath( "stop" )
+
+			# stop any ongoing fades
+			jQuery( "div#black" ).stop()
+			if @_fade_timer? then @_fade_timer.stop()
+
 			@_ctrl_play()
 
-		pause: ->
-			@_timers.pause()
-			jQuery( "div.slide-title > *" ).pause()
-			jQuery.fn.scrollPath( "pause" )
-
-		resume: ->
-			@_timers.resume()
-			jQuery( "div.slide-title > *" ).resume()
-			jQuery.fn.scrollPath( "resume" )
+			if not @_mute
+				# fade music to background volume
+				jQuery( @_music ).stop().animate(
+					volume: 0.5
+				, 300 )
 
 		_ctrl_play: ->
 			jQuery( "div#controls button" ).hide()
@@ -155,37 +236,41 @@ define [
 			jQuery( "div.slide-title" ).fadeTo( 0, 0 )
 				.children().removeAttr( "style" )
 
-		_start: ->
-			@_current_scene = "start"
+		###
+			Scene definitions
+			Used by select() to skip to scene
+		###
+		_intro: ->
+			@_current_scene = "intro"
 
 			now = 0
-			@_scrollto( "start" )
+			@_scrollto( @_current_scene )
 
 			# pan over Dies Agenda
-			@_scrollto( "start_1", START_1, "linear" )
-			now+=START_1
+			@_scrollto( "intro_1", INTRO[0], "linear" )
+			now+=INTRO[0]
 
 			@_timeout( =>
 				@_fadeout_in( BLACK_DUR, => @_leo() )
-			, now-FADEIN_DUR )
+			, now-FADEOUT_DUR)
 
 		_leo: ->
 			@_current_scene = "leo";
 
 			now = 0
-			@_scrollto( "leo" )
+			@_scrollto( @_current_scene )
 
 			# go inside
 			@_timeout( =>
-				@_scrollto( "leo_1", LEO_1, "easeInSine" )
+				@_scrollto( "leo_1", LEO[0], "easeInSine" )
 			, now+FADEIN_DUR )
-			now+=FADEIN_DUR + LEO_1
+			now+=FADEIN_DUR + LEO[0]
 
 			# pan through leo
 			@_timeout( =>
-				@_scrollto( "leo_2", LEO_2, "linear" )
+				@_scrollto( "leo_2", LEO[1], "linear" )
 			, now )
-			now+=LEO_2
+			now+=LEO[1]
 
 			# show text
 			@_timeout( =>
@@ -194,71 +279,71 @@ define [
 
 			# go upstairs
 			@_timeout( =>
-				@_scrollto( "receptie", LEO_3, "linear" )
+				@_scrollto( "recepski", LEO[2], "linear" )
 			, now )
-			now+=LEO_3
+			now+=LEO[2]
 
 			@_timeout( =>
-				@_receptie()
+				@_recepski()
 			, now )
 
-		_receptie: ->
-			@_current_scene = "receptie";
+		_recepski: ->
+			@_current_scene = "recepski";
 
 			now = 0
-			@_scrollto( "receptie" )
+			@_scrollto( @_current_scene );
 			
 			# continue upstairs
-			@_scrollto( "receptie_1", RECEPTIE_1, "linear" )
-			now+=RECEPTIE_1
+			@_scrollto( "recepski_1", RECEPTIE[0], "linear" )
+			now+=RECEPTIE[0]
 
-			# pan through lezing
+			# pan through letszing
 			@_timeout( =>
-				@_scrollto( "receptie_2", RECEPTIE_2, "linear" )
+				@_scrollto( "recepski_2", RECEPTIE[1], "linear" )
 			, now )
-			now+=RECEPTIE_2
+			now+=RECEPTIE[1]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "receptie" )
+				@_showtext( "recepski" )
 			, RECEPTIE_TEXT )
 
-			# continue to lezing
+			# continue to letszing
 			@_timeout( =>
-				@_scrollto( "lezing", RECEPTIE_3, "linear" )
+				@_scrollto( "letszing", RECEPTIE[2], "linear" )
 			, now )
-			now+=RECEPTIE_3
+			now+=RECEPTIE[2]
 
 			@_timeout( =>
-				@_lezing()
+				@_letszing()
 			, now )
 
-		_lezing: ->
-			@_current_scene = "lezing";
+		_letszing: ->
+			@_current_scene = "letszing";
 
 			now = 0
-			@_scrollto( "lezing" )
+			@_scrollto( @_current_scene )
 
-			# pan through lezing and go outside
-			@_scrollto( "courtyard", LEZING_1, "linear" )
-			now+=LEZING_1
+			# pan through letszing and go outside
+			@_scrollto( "courtyard", LEZING[0], "linear" )
+			now+=LEZING[0]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "lezing" )
+				@_showtext( "letszing" )
 			, LEZING_TEXT )
 
 			# go downstairs to the courtyard
 			@_timeout( =>
-				@_scrollto( "courtyard_1", LEZING_2, "linear" )
+				@_scrollto( "courtyard_1", LEZING[1], "linear" )
 			, now )
-			now+=LEZING_2
+			now+=LEZING[1]
 
 			# proceed to tsarwars
 			@_timeout( =>
-				@_scrollto( "tsarwars", LEZING_3, "linear" )
+				@_scrollto( "tsarwars", LEZING[2], "linear" )
 			, now )
-			now+=LEZING_3
+			now+=LEZING[2]
 
 			@_timeout( =>
 				@_tsarwars()
@@ -268,11 +353,11 @@ define [
 			@_current_scene = "tsarwars";
 
 			now = 0
-			@_scrollto( "tsarwars" )
+			@_scrollto( @_current_scene )
 
 			# pan through tsarwars
-			@_scrollto( "tsarwars_1", TSARWARS_1, "linear" )
-			now+=TSARWARS_1
+			@_scrollto( "tsarwars_1", TSARWARS[0], "linear" )
+			now+=TSARWARS[0]
 
 			# show text
 			@_timeout( =>
@@ -281,86 +366,86 @@ define [
 
 			# walk to the ladder
 			@_timeout( =>
-				@_scrollto( "tsarwars_2", TSARWARS_2, "easeOutSine" )
+				@_scrollto( "tsarwars_2", TSARWARS[1], "easeOutSine" )
 			, now )
-			now+=TSARWARS_2
+			now+=TSARWARS[1]
 
-			# go up the ladder to excursie
+			# go up the ladder to ekskurzyi
 			@_timeout( =>
-				@_scrollto( "excursie", TSARWARS_3, "easeInOutSine" )
+				@_scrollto( "ekskurzyi", TSARWARS[2], "easeInOutSine" )
 			, now )
-			now+=TSARWARS_3
+			now+=TSARWARS[2]
 
 			@_timeout( =>
-				@_excursie()
+				@_ekskurzyi()
 			, now )
 
-		_excursie: ->
-			@_current_scene = "excursie";
+		_ekskurzyi: ->
+			@_current_scene = "ekskurzyi";
 
 			now = 0
-			@_scrollto( "excursie" )
+			@_scrollto( @_current_scene )
 
 			# wait a moment on the balcony
 			@_timeout( =>
-				# continue to brusjesdag
-				@_scrollto( "brusjesdag", EXCURSIE_2, "easeInSine" )
-			, EXCURSIE_1 )
-			now+=EXCURSIE_1+EXCURSIE_2
+				# continue to bruzjesdag
+				@_scrollto( "bruzjesdag", EXCURSIE[1], "easeInSine" )
+			, EXCURSIE[0])
+			now+=EXCURSIE[0]+EXCURSIE[1]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "excursie" )
+				@_showtext( "ekskurzyi" )
 			, EXCURSIE_TEXT )
 
 			@_timeout( =>
-				@_brusjesdag()
+				@_bruzjesdag()
 			, now )
 
-		_brusjesdag: ->
-			@_current_scene = "brusjesdag";
+		_bruzjesdag: ->
+			@_current_scene = "bruzjesdag";
 
 			now = 0
-			@_scrollto( "brusjesdag" )
+			@_scrollto( @_current_scene )
 
-			# pan through brusjesdag and go to spellen
-			@_scrollto( "spellen", BRUSJES_1, "linear" )
-			now+=BRUSJES_1
+			# pan through bruzjesdag and go to gsg
+			@_scrollto( "gsg", BRUSJES[0], "linear" )
+			now+=BRUSJES[0]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "brusjesdag" 
+				@_showtext( "bruzjesdag" 
 					duration: 3000
 					reverse: true
 				)
 			, BRUSJES_TEXT )
 
 			@_timeout( =>
-				@_spellen()
+				@_gsg()
 			, now )
 
-		_spellen: ->
-			@_current_scene = "spellen";
+		_gsg: ->
+			@_current_scene = "gsg";
 
 			now = 0
-			@_scrollto( "spellen" )
+			@_scrollto( @_current_scene )
 
-			# pan through spellen
-			@_scrollto( "spellen_1", SPELLEN_1, "linear" )
-			now+=SPELLEN_1
+			# pan through gsg
+			@_scrollto( "gsg_1", SPELLEN[0], "linear" )
+			now+=SPELLEN[0]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "spellen" 
+				@_showtext( "gsg" 
 					duration: 4000
 				)
 			, SPELLEN_TEXT )
 
 			# jump down the trap to hv
 			@_timeout( =>
-				@_scrollto( "hv", SPELLEN_2, "easeInQuad" )
+				@_scrollto( "hv", SPELLEN[1], "easeInQuad" )
 			, now )
-			now+=SPELLEN_2
+			now+=SPELLEN[1]
 
 			@_timeout( =>
 				@_hv()
@@ -370,137 +455,137 @@ define [
 			@_current_scene = "hv";
 
 			now = 0
-			@_scrollto( "hv" )
+			@_scrollto( @_current_scene )
 
 			# pan through hv
-			@_scrollto( "hv_1", HV_1, "easeInSine" )
-			now+=HV_1
+			@_scrollto( "hv_1", HV[0], "linear" )
+			now+=HV[0]
 
 			# show text
 			@_timeout( =>
 				@_showtext( "hv" )
 			, HV_TEXT )
 
-			# go down the stairs to cabaret
+			# go down the stairs to kabarad
 			@_timeout( =>
-				@_scrollto( "cabaret", HV_2, "linear" )
+				@_scrollto( "kabarad", HV[1], "linear" )
 			, now )
-			now+=HV_2
+			now+=HV[1]
 
 			@_timeout( =>
-				@_cabaret()
+				@_kabarad()
 			, now )
 
-		_cabaret: ->
-			@_current_scene = "cabaret";
+		_kabarad: ->
+			@_current_scene = "kabarad";
 
 			now = 0
-			@_scrollto( "cabaret" )
+			@_scrollto( @_current_scene )
 
-			# pan through cabaret
-			@_scrollto( "cabaret_1", CABARET_1, "linear" )
-			now+=CABARET_1
+			# pan through kabarad
+			@_scrollto( "kabarad_1", CABARET[0], "linear" )
+			now+=CABARET[0]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "cabaret" )
+				@_showtext( "kabarad" )
 			, CABARET_TEXT )
 
 			# continue up the big stairs
 			@_timeout( =>
-				@_scrollto( "turbokring", CABARET_2, "easeInOutSine" )
+				@_scrollto( "tyurbokring", CABARET[1], "linear" )
 			, now )
-			now+=CABARET_2
+			now+=CABARET[1]
 
 			@_timeout( =>
-				@_turbokring()
+				@_tyurbokring()
 			, now )
 
-		_turbokring: ->
-			@_current_scene = "turbokring";
+		_tyurbokring: ->
+			@_current_scene = "tyurbokring";
 
 			now = 0
-			@_scrollto( "turbokring" )
+			@_scrollto( @_current_scene )
 
-			# pan through turbokring
-			@_scrollto( "turbo_1", TURBO_1, "linear" )
-			now+=TURBO_1
+			# pan through tyurbokring
+			@_scrollto( "turbo_1", TURBO[0], "linear" )
+			now+=TURBO[0]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "turbokring" )
+				@_showtext( "tyurbokring" )
 			, TURBO_TEXT )
 
 			# pause for effect
 			# jump out the window, on the flagpole
 			@_timeout( =>
-				@_scrollto( "turbo_2", TURBO_3, "easeInSine" )
-			, now+TURBO_2 )
-			now+=TURBO_2+TURBO_3
+				@_scrollto( "turbo_2", TURBO[2], "easeInSine" )
+			, now+TURBO[1] )
+			now+=TURBO[1]+TURBO[2]
 
 			# balance on the pole
 			@_timeout( =>
-				@_scrollto( "turbo_3", TURBO_4, "linear" )
+				@_scrollto( "turbo_3", TURBO[3], "linear" )
 			, now )
-			now+=TURBO_4
+			now+=TURBO[3]
 			@_timeout( =>
-				@_scrollto( "turbo_4", TURBO_4, "linear" )
+				@_scrollto( "turbo_4", TURBO[4], "linear" )
 			, now )
-			now+=TURBO_4
+			now+=TURBO[4]
 			@_timeout( =>
-				@_scrollto( "turbo_5", TURBO_4, "linear" )
+				@_scrollto( "turbo_5", TURBO[5], "linear" )
 			, now )
-			now+=TURBO_4
+			now+=TURBO[5]
 			@_timeout( =>
-				@_scrollto( "turbo_6", TURBO_4, "linear" )
+				@_scrollto( "turbo_6", TURBO[6], "linear" )
 			, now )
-			now+=TURBO_4
+			now+=TURBO[6]
 
-			# take the huge leap onto the roof to verticalenstrijd
+			# take the huge leap onto the roof to stryd
 			@_timeout( =>
-				@_scrollto( "verticalenstrijd", TURBO_5, "easeInSine" )
+				@_scrollto( "stryd", TURBO[7], "easeInSine" )
 			, now )
-			now+=TURBO_5
+			now+=TURBO[7]
 
 			@_timeout( =>
-				@_verticalenstrijd()
+				@_stryd()
 			, now )
 
-		_verticalenstrijd: ->
-			@_current_scene = "verticalenstrijd";
+		_stryd: ->
+			@_current_scene = "stryd";
 
 			now = 0
-			@_scrollto( "verticalenstrijd" )
+			@_scrollto( @_current_scene )
 
 			# recoil from the jump
-			@_scrollto( "strijd_1", STRIJD_1, "linear" )
-			now+=STRIJD_1
+			@_scrollto( "strijd_1", STRIJD[0], "linear" )
+			now+=STRIJD[0]
 			@_timeout( =>
-				@_scrollto( "strijd_2", STRIJD_2, "linear" )
+				@_scrollto( "strijd_2", STRIJD[1], "linear" )
 			, now )
-			now+=STRIJD_2
+			now+=STRIJD[1]
 
-			# pan through verticalenstrijd
+			# pan through stryd
 			@_timeout( =>
-				@_scrollto( "strijd_3", STRIJD_3, "easeInSine" )
+				@_scrollto( "strijd_3", STRIJD[2], "linear" )
 			, now )
-			now+=STRIJD_3
+			now+=STRIJD[2]
 
 			# climb through the window
 			@_timeout( =>
-				@_scrollto( "strijd_4", STRIJD_4, "easeInSine" )
+				@_scrollto( "strijd_4", STRIJD[3], "easeInSine" )
 			, now )
-			now+=STRIJD_4
+			now+=STRIJD[3]
 
 			# jump down unto the dancefloor after a short break
 			@_timeout( =>
-				@_scrollto( "gala", STRIJD_5, "easeOutSine" )
+				@_scrollto( "gala", STRIJD[4], "easeOutSine" )
 			, now )
-			now+=STRIJD_5
+			now+=STRIJD[4]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "verticalenstrijd" )
+				@_showtext( "stryd" )
 			, STRIJD_TEXT )
 
 			@_timeout( =>
@@ -511,23 +596,23 @@ define [
 			@_current_scene = "gala";
 
 			now = 0
-			@_scrollto( "gala" )
+			@_scrollto( @_current_scene )
 
 			# pan through gala
-			@_scrollto( "gala_1", GALA_1, "linear" )
-			now+=GALA_1
+			@_scrollto( "gala_1", GALA[0], "linear" )
+			now+=GALA[0]
 
 			# pan up
 			@_timeout( =>
-				@_scrollto( "gala_2", GALA_2, "linear" )
+				@_scrollto( "gala_2", GALA[1], "linear" )
 			, now )
-			now+=GALA_2
+			now+=GALA[1]
 
 			# fade out
 			@_timeout( =>
-				@_fadeout_in( GALA_3 )
+				@_fadeout_in( GALA[2] )
 			, now-FADEOUT_DUR )
-			now+=GALA_3
+			now+=GALA[2]
 
 			# show text
 			@_timeout( =>
@@ -537,32 +622,36 @@ define [
 			, GALA_TEXT )
 
 			@_timeout( =>
-				@_dedebrunch()
+				@_dedebryunsz()
 			, now )
 
-		_dedebrunch: ->
-			@_current_scene = "dedebrunch";
+		_dedebryunsz: ->
+			@_current_scene = "dedebryunsz";
 
 			now = 0
-			@_scrollto( "dedebrunch" )
+			@_scrollto( @_current_scene )
 
 			# pan down brunch
-			@_scrollto( "brunch_1", BRUNCH_1, "easeInOutSine" )
-			now+=BRUNCH_1
+			@_scrollto( "brunch_1", BRUNCH[0], "easeInOutSine" )
+			now+=BRUNCH[0]
 
 			# show text
 			@_timeout( =>
-				@_showtext( "dedebrunch" 
+				@_showtext( "dedebryunsz" 
 					duration: 6000
-					reverse: true
 				)
 			, BRUNCH_TEXT )
-			now+=BRUNCH_TEXT
 
 			@_timeout( =>
 				@_ctrl_replay()
 			, now )
+		###
+			\Scene definitions
+		###
 
+		### @param target		target string of scene
+			@param [options]	optional animation options ( consult jQuery.animate )
+		###
 		_showtext: ( target, options = {} ) ->
 			# define default options
 			defaults =
@@ -574,6 +663,7 @@ define [
 			h1Left = if options.reverse then "-=150" else "+=150"
 			h2Left = if options.reverse then "+=150" else "-=150"
 
+			# fade in text and animate titles in opposite directions
 			el = jQuery( "div##{target}" )
 			el.fadeTo( 400, 1 )
 				.find( "h1" ).animate(
@@ -588,12 +678,16 @@ define [
 					duration: 10000
 				)
 
+			# fade out text
 			@_timeout( =>
 				el.fadeTo( 400, 0 )
 			, options.duration )
 
+		###
+			Helper functions
+		###
 		_scrollto: ( target, duration, callback ) ->
-			jQuery.fn.scrollPath( "scrollTo", target, duration/SPEED, callback )
+			jQuery.fn.scrollPath( "scrollTo", target, duration, callback )
 
 		_timeout: ( cb, delay ) ->
 			@_timers.add( cb, delay )
@@ -614,7 +708,13 @@ define [
 					@_fadein( cb2 )
 				, delay )
 			)
+		###
+			\Helper functions
+		###
 
+		###
+			Scrollpath init functions
+		###
 		_init_scrollpath: ->
 			PI = Math.PI
 
@@ -693,8 +793,8 @@ define [
 				scrollSpeed: 40
 			)
 				# intro
-				.moveTo( P0.x, P0.y, { name: "start" })
-				.lineTo( P01.x, P01.y, { name: "start_1" })
+				.moveTo( P0.x, P0.y, { name: "intro" })
+				.lineTo( P01.x, P01.y, { name: "intro_1" })
 
 				# arrive with horse and carriage, go inside, to Tuesday: "LeO"
 				.moveTo( P1.x, P1.y, { name: "leo" })
@@ -702,12 +802,12 @@ define [
 				.arc( C2.x, C2.y, C2.rad, 0, -PI/4, true, { name: "leo_2" } )
 
 				# walk up the stairs, to Wednesday: "Recepski"
-				.arc( C3.x, C3.y, C3.rad, 3/4*PI, PI, false, { name: "receptie" } )
-				.arc( C4.x, C4.y, C4.rad, PI, -PI/2, false, { name: "receptie_1" })
-				.arc( C5.x, C5.y, C5.rad, PI/2, -PI/2, true, { name: "receptie_2" })
+				.arc( C3.x, C3.y, C3.rad, 3/4*PI, PI, false, { name: "recepski" } )
+				.arc( C4.x, C4.y, C4.rad, PI, -PI/2, false, { name: "recepski_1" })
+				.arc( C5.x, C5.y, C5.rad, PI/2, -PI/2, true, { name: "recepski_2" })
 
 				# continue up the stairs, to Thursday: "Letzing"
-				.arc( C6.x, C6.y, C6.rad, PI/2, -PI/2, false, { name: "lezing" })
+				.arc( C6.x, C6.y, C6.rad, PI/2, -PI/2, false, { name: "letszing" })
 
 				# go outside, to the courtyard, down the stairs
 				.arc( C7.x, C7.y, C7.rad, -PI/2, 0, false, { name: "courtyard" })
@@ -719,25 +819,25 @@ define [
 				.lineTo( P2.x, P2.y, { name: "tsarwars_2" })
 
 				# climb up the ladder, still Friday, but "Ekskursyi"
-				.lineTo( P3.x, P3.y, { name: "excursie" })
+				.lineTo( P3.x, P3.y, { name: "ekskurzyi" })
 
 				# enter the west wing, to Saturday: "Bruzjesdag"
-				.lineTo( P4.x, P4.y, { name: "brusjesdag" })
+				.lineTo( P4.x, P4.y, { name: "bruzjesdag" })
 
 				# continue to the next room for Sunday: "Geszelschap Speylen Geszelschap"
-				.lineTo( P5.x, P5.y, { name: "spellen" })
-				.arc( C11.x, C11.y, C11.rad, -PI/2, 0, false, { name: "spellen_1" })
+				.lineTo( P5.x, P5.y, { name: "gsg" })
+				.arc( C11.x, C11.y, C11.rad, -PI/2, 0, false, { name: "gsg_1" })
 
 				# jump down the trapdoor, attending "Huishoudlijk Vergadring" on Monday
 				.lineTo( P6.x, P6.y, { name: "hv" })
 				.arc( C12.x, C12.y, C12.rad, -PI/2, -PI, true, { name: "hv_1" })
 
 				# go down the stairs, to Tuesday: "Kabarat"
-				.arc( C13.x, C13.y, C13.rad, PI, PI/2, true, { name: "cabaret" })
-				.arc( C14.x, C14.y, C14.rad, PI/2, 0, true, { name: "cabaret_1" })
+				.arc( C13.x, C13.y, C13.rad, PI, PI/2, true, { name: "kabarad" })
+				.arc( C14.x, C14.y, C14.rad, PI/2, 0, true, { name: "kabarad_1" })
 
 				# up the stairs again, to Wednesday: "Turbokring"
-				.arc( C15.x, C15.y, C15.rad, 0, -PI/2, true, { name: "turbokring" })
+				.arc( C15.x, C15.y, C15.rad, 0, -PI/2, true, { name: "tyurbokring" })
 				.lineTo( P7.x, P7.y, { name: "turbo_1" })
 				# hop out the window, on the flagpole, balance a little
 				.arc( C16.x, C16.y, C16.rad, -PI/8, -PI*3/4, true, { name: "turbo_2" })
@@ -747,7 +847,7 @@ define [
 				.lineTo( P11.x, P11.y, { name: "turbo_6" })
 
 				# take a huge leap and jump on the roof, to Thursday: "Stryd y Vertikalny"
-				.arc( C17.x, C17.y, C17.rad, -PI/8, -PI*5/8, true, { name: "verticalenstrijd" })
+				.arc( C17.x, C17.y, C17.rad, -PI/8, -PI*5/8, true, { name: "stryd" })
 				.lineTo( P12.x, P12.y, { name: "strijd_1" })
 				.lineTo( P13.x, P13.y, { name: "strijd_2" })
 				.lineTo( P14.x, P14.y, { name: "strijd_3" })
@@ -759,10 +859,62 @@ define [
 				.lineTo( P15.x, P15.y, { name: "gala_2" })
 
 				# transition to Saturday: "DeDe Bryunsz"
-				.moveTo( P16.x, P16.y, { name: "dedebrunch" })
+				.moveTo( P16.x, P16.y, { name: "dedebryunsz" })
 				.lineTo( P17.x, P17.y, { name: "brunch_1" })
 				
+			# initiate ScrollPath on background image ( for real )
 			jQuery( "div#background" ).scrollPath(
 				scroll: false
 				container: jQuery( "div#window" )
 			)
+		###
+			\Scrollpath init functions
+		###
+
+		# Helper function to calculate the time for the beginning of a specific scene
+		_get_music_ms: ( scene ) ->
+			t = 0
+
+			if scene is "intro" then return t
+			t += BLACK_DUR + INTRO.reduce ( p, c ) -> p + c
+
+			if scene is "leo" then return t
+			t += LEO.reduce ( p, c ) -> p + c
+
+			if scene is "recepski" then return t
+			t += RECEPTIE.reduce ( p, c ) -> p + c
+
+			if scene is "letszing" then return t
+			t += LEZING.reduce ( p, c ) -> p + c
+
+			if scene is "tsarwars" then return t
+			t += TSARWARS.reduce ( p, c ) -> p + c
+
+			if scene is "ekskurzyi" then return t
+			t += EXCURSIE.reduce ( p, c ) -> p + c
+
+			if scene is "bruzjesdag" then return t
+			t += BRUSJES.reduce ( p, c ) -> p + c
+
+			if scene is "gsg" then return t
+			t += SPELLEN.reduce ( p, c ) -> p + c
+
+			if scene is "hv" then return t
+			t += HV.reduce ( p, c ) -> p + c
+
+			if scene is "kabarad" then return t
+			t += CABARET.reduce ( p, c ) -> p + c
+
+			if scene is "tyurbokring" then return t
+			t += TURBO.reduce ( p, c ) -> p + c
+
+			if scene is "stryd" then return t
+			t += STRIJD.reduce ( p, c ) -> p + c
+
+			if scene is "gala" then return t
+			t += FADEIN_DUR + GALA.reduce ( p, c ) -> p + c
+
+			if scene is "dedebryunsz" then return t
+			t += BRUNCH.reduce ( p, c ) -> p + c
+			
+			return t
