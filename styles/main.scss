@@ -108,6 +108,10 @@ a {
 	@include transition( color, 0.2s, linear );
 }
 
+a:hover {
+	border: none;
+}
+
 button {
 	border: none;
 	outline: none;
@@ -378,8 +382,6 @@ div#window {
 
 		&#programma {
 			button#toggle-completed {
-				display: none;
-
 				@include font-chopin;
 				font-size: 25pt;
 				color: $title-gray;
@@ -544,6 +546,10 @@ div#window {
 			cursor: default;
 		} 
 	}
+}
+
+h1#stud {
+	text-align: center;
 }
 
 $menu-height: 40px;
